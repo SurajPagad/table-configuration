@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script><![CDATA[function buildSelectList() {
+    var sel1 = document.getElementById('columns_1');
+    var selected = document.getElementById('sysparm_fields');
+    saveAllSelected([sel1], [selected], ',', '\\', '--None--');
+}
+
+function showList() {
+    var tableName = getSelectedTableName();
+    if (tableName) {
+        window.open(tableName + '_list.do');
+    } else {
+        alert("");
+    }
+    ts = null;
+}
+
+function showForm() {
+    var tableName = getSelectedTableName();
+    if (tableName) {
+        window.open(tableName + '.do?sys_id=-1');
+    } else {
+        alert("");
+    }
+    ts = null;
+}
+
+function formLayout() {
+    var tableName = getSelectedTableName();
+    if (tableName) {
+        var ajaxHelper = new GlideAjax('TableEditorAjaxProcessor');
+        //var transactionScope = g_form.getValue('sysparm_transaction_scope');
+        ajaxHelper.addParam('sysparm_type', 'loadDefaultFormSection');
+        ajaxHelper.addParam('sysparm_tableName', tableName);
+        //ajaxHelper.addParam('sysparm_transaction_scope', transactionScope);
+        ajaxHelper.getXMLAnswer(this.redirectToFormLayout.bind(this));
+    } else {
+        alert("");
+    }
+    ts = null;
+}
+
+function redirectToFormLayout(answer) {
+    if (answer != null) {
+        alert(answer);
+        personalizer(answer, 'section');
+    }
+}
+
+
+function designForm() {
+    var tableName = getSelectedTableName();
+    if (tableName) {
+        var ajaxHelper = new GlideAjax('TableEditorAjaxProcessor');
+        ajaxHelper.addParam('sysparm_type', 'loadDefaultFormSection');
+        ajaxHelper.addParam('sysparm_tableName', tableName);
+        ajaxHelper.getXMLAnswer(this.redirectToFormDesign.bind(this));
+    } else {
+        alert("");
+    }
+    ts = null;
+}
+
+function redirectToFormDesign(answer) {
+    if (answer != null) {
+        var tableName = getSelectedTableName();
+        var url = new GlideURL('$ng_fd.do');
+        url.addParam('sysparm_attributes', 'startTable:"' + tableName + '",startView:"Default view"');
+        var w = getTopWindow();
+        w.popupOpenFocus(url.getURL(), 'edit_form_design', 950, 700, '', false, false);
+    }
+}
+
+function listLayout() {
+    var tableName = getSelectedTableName();
+    if (tableName) {
+        var ajaxHelper = new GlideAjax('TableEditorAjaxProcessor');
+        //var transactionScope = g_form.getValue('sysparm_transaction_scope');
+        ajaxHelper.addParam('sysparm_type', 'loadDefaultList');
+        ajaxHelper.addParam('sysparm_tableName', tableName);
+        //ajaxHelper.addParam('sysparm_transaction_scope', transactionScope);
+        ajaxHelper.getXMLAnswer(this.redirectToListLayout.bind(this));
+    } else {
+        alert("");
+    }
+    ts = null;
+}
+
+function redirectToListLayout(answer) {
+    if (answer != null) {
+        var tableName = getSelectedTableName();
+        personalizeList(answer, tableName);
+    }
+}
+
+function buildExplorerRedirectURL() {
+    var tableName = getSelectedTableName();
+    var url = new GlideURL('$restapi.do');
+    url.addParam('tableName', tableName);
+    return url;
+}
+
+function openRestExplorer() {
+    if (isWebServiceNotEnabledForTable()) {
+        alert('This table is not configured to allow web service interaction. \n To allow access select the \'Allow access to this table via web services\', check box in the Application Access section and save your changes');
+        return;
+    }
+    var url = buildExplorerRedirectURL();
+    var w = getTopWindow();
+    var newWindow = w.open(url.getURL(), "_blank");
+    newWindow.focus();
+}
+
+function isWebServiceNotEnabledForTable() {
+    var tableName = getSelectedTableName();
+    var table = new GlideRecord('sys_db_object');
+    table.addQuery('name', tableName);
+    table.query();
+    if (table.next())
+        return table.getValue('ws_access') == 'false';
+}
+
+function createRecordProducer() {
+    var tableName = getSelectedTableName();
+    var table = new GlideRecord('sys_db_object');
+    table.addQuery('name', tableName);
+    table.query();
+    if (table.next())
+        var url = "slushbucket_create_record_producer.do?sysparm_form=record_producer&sysparm_list=" + tableName;
+    url += "&sysparm_stack=no&sysparm_referring_url=sys_db_object.do?sys_id=" + table.getValue('sys_id');
+    window.open(url);
+}
+
+function showWorkflows() {
+    var tableName = getSelectedTableName();
+    window.open("wf_workflow_version_list.do?sysparm_query=table%3D" + tableName+"%5EORtableIN"+tableName+"%2Csys_metadata");
+}
+
+function otherFiles(){
+	var tableName = getSelectedTableName();
+    window.open("sys_metadata_list.do?sysparm_query=GOTO123TEXTQUERY321%3D" + tableName);
+}
+
+//sys_metadata_list.do?sysparm_query=GOTO123TEXTQUERY321%3Dchange_request&sysparm_view=
+
+function getSelectedTableName() {
+    var ts = document.getElementById("tables");
+    if (ts.selectedIndex > -1) {
+        var tableName = ts.options[ts.selectedIndex].value;
+        if (tableName)
+            return tableName;
+    }
+}
+
+function editSelectedTableCustom() {
+    var tableName = getSelectedTableName();
+    if (tableName) {
+        window.open('sys_db_object.do?sysparm_refkey=name&sys_id=' + tableName);
+    } else {
+        alert("");
+    }
+    ts = null;
+}
+
+function opentableConfig() {
+    var tableName = getSelectedTableName();
+    if (tableName) {
+        window.open('personalize_all.do?sysparm_rules_table=' + tableName + '&sysparm_rules_label=' + tableName);
+    } else {
+        alert("");
+    }
+    ts = null;
+}
+
+function tcColumnRequestCustom(evt) {
+    var table = getValue(evt);
+    if (table == null)
+        return;
+    setTableButton('open_table_config');
+    setTableButton('schema_includes_erd');
+    setTableButton('schema2_includes');
+    setTableButton('show_list');
+    setTableButton('show_form');
+    setTableButton('design_form');
+    setTableButton('form_layout');
+    setTableButton('list_layout');
+    if (g_user.hasRole('rest_api_explorer'))
+        setTableButton('rest_explorer');
+    setTableButton('record_producer');
+    setTableButton('show_wf');
+	setTableButton('other_files');
+    tcColumnRequest(evt);
+}]]></client_script>
+        <description/>
+        <direct>false</direct>
+        <endpoint/>
+        <html><![CDATA[<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+<div style="padding: 6px">
+<g2:inline template="output_messages.xml"/>
+<div style="padding: 4px;" class="list_title">${HTML:gs.getMessage('table_columns')}</div>
+<!--<div style="padding: 4px">
+	${gs.getMessage('Click a button to create a new table or application, or browse all applications.')}
+</div>--> 
+
+<table class="widelist" border="0">
+	<j2:if test="$[gs.hasRole('admin')]">
+		<tr valign="top">
+			<td colspan="3" style="padding-bottom: 4px">
+				<j2:if test="$[pm.isRegistered('com.snc.apps')]">
+				<button id="create_table_button" onclick="window.open('sys_db_object.do?sys_id=-1')"
+				        title="${gs.getMessage('Click to create a new table using the table editor')}">
+					${gs.getMessage('Create Table')}
+				</button>
+				</j2:if>
+
+				<button id="create_application_button" onclick="window.open('$studio.do')"
+				        title="${gs.getMessage('Click to create a new custom application')}">
+					${gs.getMessage('Open Studio')}
+				</button>
+
+				<button id="browse_applications_button" onclick="window.open('sys_app_list.do')"
+				        title="${gs.getMessage('Click to browse a list of all existing applications')}">
+					${gs.getMessage('Browse Applications')}
+				</button>
+				
+				<button id="browse_applications_button" onclick="window.open('v_plugin_list.do')"
+				        title="${gs.getMessage('Click to browse a list of all plugins')}">
+					${gs.getMessage('Browse Plugins')}
+				</button>
+			</td>
+		</tr>
+	</j2:if>
+	<!--<tr valign="top">
+		<td colspan="3" style="padding-bottom: 4px">
+			<hr/>
+			<div>
+				${gs.getMessage('Or, select a table to browse its columns and indices.')}
+			</div>
+		</td>
+ </tr>-->
+	<tr>
+		<td width="15%" style="padding: 4px 6px 4px 6px" class="label_left">${gs.getMessage('Table Names')}</td>
+		<td width="25%" style="padding: 4px 6px 4px 6px" class="label_left">${gs.getMessage('Column Names')}</td>
+		<td width="60%" style="padding: 4px 6px 4px 6px" class="label_left">${gs.getMessage('Column Attributes')}</td>
+	</tr>
+	<tr>
+		<td>$[SP]</td>
+	</tr>
+	<tr valign="top">
+		<td style="border: 1px solid #ededed; border-width: 0px 0px 1px 1px;">
+			<SELECT style="border: 0px;" id="tables" size="25" onchange="tcColumnRequestCustom(event);" title="Tables">
+				<g2:table_options all="true"/>
+			</SELECT>
+		</td>
+		<td style="border: 1px solid #ededed; border-width: 0px 0px 1px 1px;">
+			<div id="columns" style="margin-left: 2px; overflow: auto; height: 100%;"></div>
+		</td>
+		<td style="border: 1px solid #ededed; border-width: 0px 1px 1px 1px;">
+			<div id="column_details" style="margin-left: 2px; overflow: auto; height: 100%;"></div>
+		</td>
+	</tr>
+
+	<j2:if test="$[gs.hasRole('admin')]">
+		<tr>
+			<td>$[SP]</td>
+		</tr>
+		<tr valign="top">
+			<td colspan="3">
+
+				<j2:if test="$[pm.isRegistered('com.snc.apps')]">
+				<button id="edit_table_button" style="display: none" onclick="editSelectedTableCustom()"
+				        title="${gs.getMessage('Click to edit the selected table in table editor')}">
+					${gs.getMessage('Edit Table')}
+				</button>
+				</j2:if>
+				
+				<j2:if test="$[pm.isRegistered('com.snc.apps')]">
+					<button id="open_table_config" style="display: none" onclick="opentableConfig()"
+							title="${gs.getMessage('Click to configure the selected table in table editor')}">
+						${gs.getMessage('Table Configs')}
+					</button>
+				</j2:if>
+
+				<j2:if test="$[pm.isRegistered('com.glide.erd')]">
+					<span id='schema_includes_erd' style="display: none">
+						<g2:inline template="schema_includes_erd.xml"/>
+					</span>
+				</j2:if>
+
+				<j2:if test="$[!pm.isRegistered('com.glide.erd')]">
+					<j2:if test="$[pm.isRegistered('com.glideapp.schema_map2')]">
+						<span id='schema2_includes' style="display: none">
+							<g2:inline template="schema2_includes.xml"/>
+						</span>
+					</j2:if>
+				</j2:if>
+
+				<j2:if test="$[!pm.isRegistered('com.glide.erd')]">
+					<j2:if test="$[!pm.isRegistered('com.glideapp.schema_map2')]">
+						<j2:if test="$[pm.isRegistered('com.glideapp.schema_map')]">
+							<g2:inline template="schema_includes.xml"/>
+						</j2:if>
+					</j2:if>
+				</j2:if>
+				
+				<button id="show_list" style="display: none" onclick="showList()"
+							title="${gs.getMessage('Click to open list')}">
+						${gs.getMessage('Show List')}
+				</button>
+				
+				<button id="show_form" style="display: none" onclick="showForm()"
+							title="${gs.getMessage('Click to open form')}">
+						${gs.getMessage('Show Form')}
+				</button>
+				
+				<button id="design_form" style="display: none" onclick="designForm()"
+							title="${gs.getMessage('Click to design form')}">
+						${gs.getMessage('Design Form')}
+				</button>
+				
+				<button id="form_layout" style="display: none" onclick="formLayout()"
+							title="${gs.getMessage('Click to configure form layout')}">
+						${gs.getMessage('Form Layout')}
+				</button>
+				
+				<button id="list_layout" style="display: none" onclick="listLayout()"
+							title="${gs.getMessage('Click to configure list layout')}">
+						${gs.getMessage('List Layout')}
+				</button>
+				
+				<button id="rest_explorer" style="display: none" onclick="openRestExplorer()"
+							title="${gs.getMessage('Click to open Rest API explorer')}">
+						${gs.getMessage('Open Rest API Explorer')}
+				</button>
+				
+				<button id="record_producer" style="display: none" onclick="createRecordProducer()"
+							title="${gs.getMessage('Click to create record producer')}">
+						${gs.getMessage('Create record producer')}
+				</button>
+				
+				<button id="show_wf" style="display: none" onclick="showWorkflows()"
+							title="${gs.getMessage('Click to open workflows')}">
+						${gs.getMessage('Workflows')}
+				</button>
+				
+				<button id="other_files" style="display: none" onclick="otherFiles()"
+							title="${gs.getMessage('Click to open other files')}">
+						${gs.getMessage('Other files')}
+				</button>
+
+				<g:inline template="delete_rows_includes.xml"/>
+			</td>
+		</tr>
+	</j2:if>
+</table>
+<script>
+	addLoadEvent(tableColumnSizer);
+
+	function tableColumnSizer() {
+		var e = gel('tables');
+		if (e) {
+			gel('columns').style.height = e.offsetHeight;
+			gel('column_details').style.height = e.offsetHeight;
+		}
+	}
+</script>
+
+<g:macro_invoke macro="index_creator_information" />
+
+</div>
+</j:jelly>
+			]]></html>
+        <name>table_configurations</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-06-24 14:59:06</sys_created_on>
+        <sys_id>43b51b1d2f941110916d50492799b609</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>table_configurations</sys_name>
+        <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
+        <sys_update_name>sys_ui_page_43b51b1d2f941110916d50492799b609</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-06-24 15:06:06</sys_updated_on>
+    </sys_ui_page>
+</record_update>
