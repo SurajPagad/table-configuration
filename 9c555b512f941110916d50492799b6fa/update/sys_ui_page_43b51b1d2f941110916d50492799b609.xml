@@ -202,7 +202,7 @@ function tcColumnRequestCustom(evt) {
 <div style="padding: 4px;" class="list_title">${HTML:gs.getMessage('table_columns')}</div>
 <!--<div style="padding: 4px">
 	${gs.getMessage('Click a button to create a new table or application, or browse all applications.')}
-</div>--> 
+</div>-->   
 
 <table class="widelist" border="0">
 	<j2:if test="$[gs.hasRole('admin')]">
@@ -278,7 +278,7 @@ function tcColumnRequestCustom(evt) {
 				
 				<j2:if test="$[pm.isRegistered('com.snc.apps')]">
 					<button id="open_table_config" style="display: none" onclick="opentableConfig()"
-							title="${gs.getMessage('Click to configure the selected table in table editor')}">
+							title="${gs.getMessage('Click to open configuration for the selected table')}">
 						${gs.getMessage('Table Configs')}
 					</button>
 				</j2:if>
@@ -306,47 +306,47 @@ function tcColumnRequestCustom(evt) {
 				</j2:if>
 				
 				<button id="show_list" style="display: none" onclick="showList()"
-							title="${gs.getMessage('Click to open list')}">
+							title="${gs.getMessage('Click to open list for the selected table')}">
 						${gs.getMessage('Show List')}
 				</button>
 				
 				<button id="show_form" style="display: none" onclick="showForm()"
-							title="${gs.getMessage('Click to open form')}">
+							title="${gs.getMessage('Click to open form for the selected table')}">
 						${gs.getMessage('Show Form')}
 				</button>
 				
 				<button id="design_form" style="display: none" onclick="designForm()"
-							title="${gs.getMessage('Click to design form')}">
+							title="${gs.getMessage('Click to design form for the selected table')}">
 						${gs.getMessage('Design Form')}
 				</button>
 				
 				<button id="form_layout" style="display: none" onclick="formLayout()"
-							title="${gs.getMessage('Click to configure form layout')}">
+							title="${gs.getMessage('Click to configure form layout for the selected table')}">
 						${gs.getMessage('Form Layout')}
 				</button>
 				
 				<button id="list_layout" style="display: none" onclick="listLayout()"
-							title="${gs.getMessage('Click to configure list layout')}">
+							title="${gs.getMessage('Click to configure list layout for the selected table')}">
 						${gs.getMessage('List Layout')}
 				</button>
 				
 				<button id="rest_explorer" style="display: none" onclick="openRestExplorer()"
-							title="${gs.getMessage('Click to open Rest API explorer')}">
+							title="${gs.getMessage('Click to open Rest API explorer for the selected table')}">
 						${gs.getMessage('Open Rest API Explorer')}
 				</button>
 				
 				<button id="record_producer" style="display: none" onclick="createRecordProducer()"
-							title="${gs.getMessage('Click to create record producer')}">
+							title="${gs.getMessage('Click to create record producer for the selected table')}">
 						${gs.getMessage('Create record producer')}
 				</button>
 				
 				<button id="show_wf" style="display: none" onclick="showWorkflows()"
-							title="${gs.getMessage('Click to open workflows')}">
+							title="${gs.getMessage('Click to open workflows for the selected table')}">
 						${gs.getMessage('Workflows')}
 				</button>
 				
 				<button id="other_files" style="display: none" onclick="otherFiles()"
-							title="${gs.getMessage('Click to open other files')}">
+							title="${gs.getMessage('Click to open application files for the selected table')}">
 						${gs.getMessage('Other files')}
 				</button>
 
@@ -378,13 +378,13 @@ function tcColumnRequestCustom(evt) {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-06-24 14:59:06</sys_created_on>
         <sys_id>43b51b1d2f941110916d50492799b609</sys_id>
-        <sys_mod_count>1</sys_mod_count>
+        <sys_mod_count>4</sys_mod_count>
         <sys_name>table_configurations</sys_name>
         <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
         <sys_policy/>
         <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
         <sys_update_name>sys_ui_page_43b51b1d2f941110916d50492799b609</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2022-06-24 15:06:06</sys_updated_on>
+        <sys_updated_on>2022-06-24 17:45:25</sys_updated_on>
     </sys_ui_page>
 </record_update>
