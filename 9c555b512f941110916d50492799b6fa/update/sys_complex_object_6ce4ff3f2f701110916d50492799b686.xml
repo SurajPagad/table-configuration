@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_complex_object">
+    <sys_complex_object action="INSERT_OR_UPDATE">
+        <label/>
+        <name>FDa8e4ff3fb6701110b5fe7ee6e34fc386</name>
+        <namespace>FlowDesigner</namespace>
+        <scope_name>9c555b512f941110916d50492799b6fa</scope_name>
+        <serialized_content>{"FlowDesigner:FDa8e4ff3fb6701110b5fe7ee6e34fc386":{"code":"Integer","code.$field_facets":{"SimpleMapFacet":"{\"uiTypeLabel\":\"Integer\",\"read_only\":\"false\",\"hint\":\"\",\"uiType\":\"integer\",\"default_value\":\"\",\"label\":\"Code\",\"action_error_output\":\"true\",\"mandatory\":\"false\",\"order\":\"1\",\"max_length\":\"40\"}"},"message":"String","message.$field_facets":{"SimpleMapFacet":"{\"uiTypeLabel\":\"String\",\"read_only\":\"false\",\"hint\":\"\",\"uiType\":\"string\",\"default_value\":\"\",\"label\":\"Message\",\"action_error_output\":\"true\",\"mandatory\":\"false\",\"order\":\"2\",\"max_length\":\"4000\"}"}},"FlowDesigner:FDa8e4ff3fb6701110b5fe7ee6e34fc386.$type_facets":{"SimpleMapFacet":"{\"sourceId\":\"\",\"default_value\":\"\",\"label\":\"Action Status\",\"action_error_output\":\"true\",\"mandatory\":\"false\",\"uiUniqueId\":\"1538d4ed-6f30-4088-b4f0-0aed5a7f658e\",\"uiTypeLabel\":\"Object\",\"co_type_name\":\"FDa8e4ff3fb6701110b5fe7ee6e34fc386\",\"element_mapping_provider\":\"com.glide.flow_design.action.data.FlowDesignVariableMapper\",\"read_only\":\"false\",\"sourceUiUniqueId\":\"\",\"sourceType\":\"\",\"hint\":null,\"uiType\":\"object\",\"order\":\"1\",\"max_length\":\"65000\"}"}}</serialized_content>
+        <sys_class_name>sys_complex_object</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-07-27 08:08:26</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>6ce4ff3f2f701110916d50492799b686</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>FDa8e4ff3fb6701110b5fe7ee6e34fc386</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
+        <sys_update_name>sys_complex_object_6ce4ff3f2f701110916d50492799b686</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-07-27 08:08:26</sys_updated_on>
+        <type>complex_object_schema</type>
+    </sys_complex_object>
+</record_update>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_hub_flow">
+    <sys_hub_flow action="DELETE">
+        <access>public</access>
+        <acls/>
+        <active>false</active>
+        <annotation/>
+        <callable_by_client_api>false</callable_by_client_api>
+        <category/>
+        <compiler_build/>
+        <copied_from/>
+        <copied_from_name/>
+        <description/>
+        <internal_name>get_artifacts</internal_name>
+        <label_cache>[]</label_cache>
+        <latest_snapshot/>
+        <master_snapshot/>
+        <name>Get Artifacts</name>
+        <natlang/>
+        <outputs/>
+        <remote_trigger_id/>
+        <run_as>system</run_as>
+        <run_with_roles/>
+        <sc_callable>false</sc_callable>
+        <show_draft_actions>false</show_draft_actions>
+        <show_triggered_flows>false</show_triggered_flows>
+        <status>draft</status>
+        <sys_class_name>sys_hub_flow</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-07-27 09:22:02</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>6eb5c88c2f811110916d50492799b64e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Get Artifacts</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
+        <sys_update_name>sys_hub_flow_6eb5c88c2f811110916d50492799b64e</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-07-27 09:22:02</sys_updated_on>
+        <type>flow</type>
+    </sys_hub_flow>
+    <sys_translated_text action="DELETE" query="documentkey=6eb5c88c2f811110916d50492799b64e"/>
+    <sys_variable_value action="DELETE" query="document_key=6eb5c88c2f811110916d50492799b64e"/>
+    <sys_hub_trigger_instance action="DELETE" query="flow=6eb5c88c2f811110916d50492799b64e"/>
+    <sys_hub_flow_stage action="DELETE" query="flow=6eb5c88c2f811110916d50492799b64e"/>
+    <sys_flow_cat_variable_model action="DELETE" query="id=6eb5c88c2f811110916d50492799b64e^sys_idNOT IN2eb5c88c2f811110916d50492799b650"/>
+    <sys_flow_cat_variable_model action="DELETE">
+        <id>6eb5c88c2f811110916d50492799b64e</id>
+        <name>Get Artifacts</name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-07-27 09:22:02</sys_created_on>
+        <sys_id>2eb5c88c2f811110916d50492799b650</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_scope/>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-07-27 09:22:02</sys_updated_on>
+    </sys_flow_cat_variable_model>
+    <sys_flow_cat_variable action="DELETE" query="flow_catalog_model=2eb5c88c2f811110916d50492799b650"/>
+    <sys_hub_flow_input action="DELETE" query="model=6eb5c88c2f811110916d50492799b64e"/>
+    <sys_hub_flow_output action="DELETE" query="model=6eb5c88c2f811110916d50492799b64e"/>
+    <sys_hub_alias_mapping action="DELETE" query="source_id=6eb5c88c2f811110916d50492799b64e"/>
+    <sys_hub_action_instance action="DELETE" query="flow=6eb5c88c2f811110916d50492799b64e"/>
+    <sys_hub_sub_flow_instance action="DELETE" query="flow=6eb5c88c2f811110916d50492799b64e"/>
+    <sys_hub_flow_logic action="DELETE" query="flow=6eb5c88c2f811110916d50492799b64e"/>
+    <sys_hub_pill_compound action="DELETE" query="attached_to=6eb5c88c2f811110916d50492799b64e"/>
+    <sys_hub_flow_variable action="DELETE" query="model=6eb5c88c2f811110916d50492799b64e"/>
+    <sys_documentation action="DELETE" query="name=var__m_sys_hub_flow_input_6eb5c88c2f811110916d50492799b64e"/>
+    <sys_choice action="DELETE" query="name=var__m_sys_hub_flow_input_6eb5c88c2f811110916d50492799b64e"/>
+    <sys_documentation action="DELETE" query="name=var__m_sys_hub_flow_output_6eb5c88c2f811110916d50492799b64e"/>
+    <sys_choice action="DELETE" query="name=var__m_sys_hub_flow_output_6eb5c88c2f811110916d50492799b64e"/>
+    <sys_flow_trigger_plan action="DELETE" query="plan_id=6eb5c88c2f811110916d50492799b64e"/>
+    <sys_flow_subflow_plan action="DELETE" query="plan_id=6eb5c88c2f811110916d50492799b64e"/>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Table configuration">9c555b512f941110916d50492799b6fa</application>
+        <file_path/>
+        <instance_id>3ef751bddb92ff40f492c59705961990</instance_id>
+        <instance_name>dev88983</instance_name>
+        <name>sys_hub_flow_6eb5c88c2f811110916d50492799b64e</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_hub_flow"><sys_hub_flow action="INSERT_OR_UPDATE"><access>public</access><acls/><active>false</active><annotation/><callable_by_client_api>false</callable_by_client_api><category/><compiler_build/><copied_from/><copied_from_name/><description/><internal_name>get_artifacts</internal_name><label_cache>[]</label_cache><latest_snapshot/><master_snapshot/><name>Get Artifacts</name><natlang/><outputs/><remote_trigger_id/><run_as>system</run_as><run_with_roles/><sc_callable>false</sc_callable><show_draft_actions>false</show_draft_actions><show_triggered_flows>false</show_triggered_flows><status>draft</status><sys_class_name>sys_hub_flow</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2022-07-27 09:22:02</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>6eb5c88c2f811110916d50492799b64e</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Get Artifacts</sys_name><sys_overrides/><sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package><sys_policy/><sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope><sys_update_name>sys_hub_flow_6eb5c88c2f811110916d50492799b64e</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2022-07-27 09:22:02</sys_updated_on><type>flow</type></sys_hub_flow><sys_translated_text action="delete_multiple" query="documentkey=6eb5c88c2f811110916d50492799b64e"/><sys_variable_value action="delete_multiple" query="document_key=6eb5c88c2f811110916d50492799b64e"/><sys_hub_trigger_instance action="delete_multiple" query="flow=6eb5c88c2f811110916d50492799b64e"/><sys_hub_flow_stage action="delete_multiple" query="flow=6eb5c88c2f811110916d50492799b64e"/><sys_flow_cat_variable_model action="delete_multiple" query="id=6eb5c88c2f811110916d50492799b64e^sys_idNOT IN2eb5c88c2f811110916d50492799b650"/><sys_flow_cat_variable_model action="INSERT_OR_UPDATE"><id>6eb5c88c2f811110916d50492799b64e</id><name>Get Artifacts</name><sys_created_by>admin</sys_created_by><sys_created_on>2022-07-27 09:22:02</sys_created_on><sys_id>2eb5c88c2f811110916d50492799b650</sys_id><sys_mod_count>0</sys_mod_count><sys_scope/><sys_updated_by>admin</sys_updated_by><sys_updated_on>2022-07-27 09:22:02</sys_updated_on></sys_flow_cat_variable_model><sys_flow_cat_variable action="delete_multiple" query="flow_catalog_model=2eb5c88c2f811110916d50492799b650"/><sys_hub_flow_input action="delete_multiple" query="model=6eb5c88c2f811110916d50492799b64e"/><sys_hub_flow_output action="delete_multiple" query="model=6eb5c88c2f811110916d50492799b64e"/><sys_hub_alias_mapping action="delete_multiple" query="source_id=6eb5c88c2f811110916d50492799b64e"/><sys_hub_action_instance action="delete_multiple" query="flow=6eb5c88c2f811110916d50492799b64e"/><sys_hub_sub_flow_instance action="delete_multiple" query="flow=6eb5c88c2f811110916d50492799b64e"/><sys_hub_flow_logic action="delete_multiple" query="flow=6eb5c88c2f811110916d50492799b64e"/><sys_hub_pill_compound action="delete_multiple" query="attached_to=6eb5c88c2f811110916d50492799b64e"/><sys_hub_flow_variable action="delete_multiple" query="model=6eb5c88c2f811110916d50492799b64e"/><sys_documentation action="delete_multiple" query="name=var__m_sys_hub_flow_input_6eb5c88c2f811110916d50492799b64e"/><sys_choice action="delete_multiple" query="name=var__m_sys_hub_flow_input_6eb5c88c2f811110916d50492799b64e"/><sys_documentation action="delete_multiple" query="name=var__m_sys_hub_flow_output_6eb5c88c2f811110916d50492799b64e"/><sys_choice action="delete_multiple" query="name=var__m_sys_hub_flow_output_6eb5c88c2f811110916d50492799b64e"/><sys_flow_trigger_plan action="delete_multiple" query="plan_id=6eb5c88c2f811110916d50492799b64e"/><sys_flow_subflow_plan action="delete_multiple" query="plan_id=6eb5c88c2f811110916d50492799b64e"/></record_update>]]></payload>
+        <payload_hash>1639715521</payload_hash>
+        <record_name>Get Artifacts</record_name>
+        <reverted_from/>
+        <source>c6cb37152f981110916d50492799b662</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-07-27 09:22:02</sys_created_on>
+        <sys_id>b6b50c8c2f811110916d50492799b6cd</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1823ef692230000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-07-27 09:22:02</sys_updated_on>
+        <type>Flow</type>
+        <update_guid>feb50c8c778111104f02db6c57820acc</update_guid>
+        <update_guid_history>feb50c8c778111104f02db6c57820acc:1639715521</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-07-27 14:50:53</sys_created_on>
+        <sys_db_object display_value="" name="sys_hub_flow">sys_hub_flow</sys_db_object>
+        <sys_id>7f06fcc0c6cc4d71b9ad9f56ec9c1739</sys_id>
+        <sys_metadata>6eb5c88c2f811110916d50492799b64e</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Get Artifacts</sys_name>
+        <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
+        <sys_scope_delete display_value="">4712c933ab024ab09c54c6a639b0b390</sys_scope_delete>
+        <sys_update_name>sys_hub_flow_6eb5c88c2f811110916d50492799b64e</sys_update_name>
+        <sys_update_version display_value="sys_hub_flow_6eb5c88c2f811110916d50492799b64e">b6b50c8c2f811110916d50492799b6cd</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-07-27 14:50:53</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

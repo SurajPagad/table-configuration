@@ -138,7 +138,7 @@ function showWorkflows() {
     window.open("wf_workflow_version_list.do?sysparm_query=table%3D" + tableName+"%5EORtableIN"+tableName+"%2Csys_metadata");
 }
 
-function otherFiles(){
+function allFiles(){
 	var tableName = getSelectedTableName();
     window.open("sys_metadata_list.do?sysparm_query=GOTO123TEXTQUERY321%3D" + tableName);
 }
@@ -190,7 +190,7 @@ function tcColumnRequestCustom(evt) {
         setTableButton('rest_explorer');
     setTableButton('record_producer');
     setTableButton('show_wf');
-	setTableButton('other_files');
+	setTableButton('all_files');
     tcColumnRequest(evt);
 }]]></client_script>
         <description/>
@@ -199,7 +199,7 @@ function tcColumnRequestCustom(evt) {
         <html><![CDATA[<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
 <div style="padding: 6px">
 <g2:inline template="output_messages.xml"/>
-<div style="padding: 4px;" class="list_title">${HTML:gs.getMessage('table_columns')}</div>
+<div style="padding: 4px;" class="list_title">${HTML:gs.getMessage('table_configurations')}</div>
 <!--<div style="padding: 4px">
 	${gs.getMessage('Click a button to create a new table or application, or browse all applications.')}
 </div>-->   
@@ -232,14 +232,14 @@ function tcColumnRequestCustom(evt) {
 			</td>
 		</tr>
 	</j2:if>
-	<!--<tr valign="top">
+	<tr valign="top">
 		<td colspan="3" style="padding-bottom: 4px">
 			<hr/>
 			<div>
-				${gs.getMessage('Or, select a table to browse its columns and indices.')}
+				${gs.getMessage('Select or search a table to browse its columns, indices and configurations.')}
 			</div>
 		</td>
- </tr>-->
+	</tr>
 	<tr>
 		<td width="15%" style="padding: 4px 6px 4px 6px" class="label_left">${gs.getMessage('Table Names')}</td>
 		<td width="25%" style="padding: 4px 6px 4px 6px" class="label_left">${gs.getMessage('Column Names')}</td>
@@ -345,9 +345,9 @@ function tcColumnRequestCustom(evt) {
 						${gs.getMessage('Workflows')}
 				</button>
 				
-				<button id="other_files" style="display: none" onclick="otherFiles()"
+				<button id="all_files" style="display: none" onclick="allFiles()"
 							title="${gs.getMessage('Click to open application files for the selected table')}">
-						${gs.getMessage('Other files')}
+						${gs.getMessage('All files')}
 				</button>
 
 				<g:inline template="delete_rows_includes.xml"/>
@@ -378,13 +378,13 @@ function tcColumnRequestCustom(evt) {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-06-24 14:59:06</sys_created_on>
         <sys_id>43b51b1d2f941110916d50492799b609</sys_id>
-        <sys_mod_count>4</sys_mod_count>
+        <sys_mod_count>8</sys_mod_count>
         <sys_name>table_configurations</sys_name>
         <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
         <sys_policy/>
         <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
         <sys_update_name>sys_ui_page_43b51b1d2f941110916d50492799b609</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2022-06-24 17:45:25</sys_updated_on>
+        <sys_updated_on>2022-06-26 07:02:52</sys_updated_on>
     </sys_ui_page>
 </record_update>
