@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
     <sys_ui_page action="INSERT_OR_UPDATE">
         <category>general</category>
-        <client_script><![CDATA[function fetchArtifacts() {
+        <client_script><![CDATA[function getArtifacts() {
     gel('response').innerText = 'Loading...';
     var appID = gel('app').value;
     if (appID) {
@@ -19,16 +19,24 @@
         var outerList = document.createElement("ul");
         artifacts.forEach(function(artifact) {
             var artifactItem = document.createElement("li");
-            artifactItem.innerText = artifact.name;
+			var artifactItemLabel =  document.createElement("span");
+			artifactItemLabel.innerText = artifact.name;
+            artifactItemLabel.setAttribute('data-toggle', 'collapse');
+            artifactItemLabel.setAttribute('data-target', '#' + artifact.name.replaceAll(/[\s|&]/g, ''));
+            artifactItem.appendChild(artifactItemLabel);
             var artifactTypes = artifact.types ? artifact.types : [];
             if (checkAllArtifactType(artifactTypes)) {
                 var artifactTypeList = document.createElement("ul");
+                artifactTypeList.setAttribute('class', 'collapse in');
+                artifactTypeList.setAttribute('id', artifact.name.replaceAll(/[\s|&]/g, ''));
                 artifactItem.appendChild(artifactTypeList);
                 artifactTypes.forEach(function(artifactType) {
                     var artifactTypeName = artifactType.name;
                     var metaDataFiles = artifactType.artifacts ? artifactType.artifacts : [];
                     if (metaDataFiles.length > 0) {
                         var typeItem = document.createElement("li");
+                        typeItem.setAttribute('data-toggle', 'collapse');
+                        typeItem.setAttribute('data-target', '#' + artifactTypeName.replaceAll(/[\s|&]/g, ''));
                         typeItem.innerText = artifactTypeName;
                         artifactTypeList.appendChild(typeItem);
                         var metaDataList = createMetaDataFileLink(metaDataFiles, artifactType, instanceName);
@@ -39,7 +47,7 @@
                 outerList.appendChild(artifactItem);
             }
         });
-		gel('response').innerText = '';
+        gel('response').innerText = '';
         gel('response').appendChild(outerList);
     }
 }
@@ -52,12 +60,10 @@ function checkAllArtifactType(artifactTypes) {
     });
 }
 
-function createArtifactType() {
-
-}
-
 function createMetaDataFileLink(metaDataFiles, artifactType, instanceName) {
     var metaDataList = document.createElement("ul");
+    metaDataList.setAttribute('class', 'collapse in');
+    metaDataList.setAttribute('id', artifactType.name.replaceAll(/[\s|&]/g, ''));
     metaDataFiles.forEach(function(metaDataFile) {
         var metaDataFileName = metaDataFile.name;
         var metaDataFileSysID = metaDataFile.sysId;
@@ -76,13 +82,9 @@ function createMetaDataFileLink(metaDataFiles, artifactType, instanceName) {
         <endpoint/>
         <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
-
-     <p>Select an application and click get to fetch artifacts</p>
-		<g:ui_reference name="app" id="app_id" table="sys_scope" query="active=true" completer="AJAXTableCompleter" 
-columns="scope"/>
-		<button id='app_id' onClick="fetchArtifacts()">Get</button>
+     <p>Select an application to fetch the artifacts</p>
+	 <g:ui_reference name="app" id="app_id" table="sys_scope" query="active=true" completer="AJAXTableCompleter" onchange="getArtifacts()" columns="scope"/>
 	<div id='response'></div>
-
 </j:jelly>]]></html>
         <name>application_explorer</name>
         <processing_script/>
@@ -90,13 +92,13 @@ columns="scope"/>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-07-27 08:02:06</sys_created_on>
         <sys_id>7333f7f72f701110916d50492799b64c</sys_id>
-        <sys_mod_count>64</sys_mod_count>
+        <sys_mod_count>93</sys_mod_count>
         <sys_name>application_explorer</sys_name>
         <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
         <sys_policy/>
         <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
         <sys_update_name>sys_ui_page_7333f7f72f701110916d50492799b64c</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2022-07-29 11:02:15</sys_updated_on>
+        <sys_updated_on>2022-08-02 13:16:51</sys_updated_on>
     </sys_ui_page>
 </record_update>
