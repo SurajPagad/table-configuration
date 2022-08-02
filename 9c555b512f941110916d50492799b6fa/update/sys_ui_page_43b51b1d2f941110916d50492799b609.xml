@@ -44,7 +44,6 @@ function formLayout() {
 
 function redirectToFormLayout(answer) {
     if (answer != null) {
-        alert(answer);
         personalizer(answer, 'section');
     }
 }
@@ -140,10 +139,9 @@ function showWorkflows() {
 
 function allFiles(){
 	var tableName = getSelectedTableName();
-    window.open("sys_metadata_list.do?sysparm_query=GOTO123TEXTQUERY321%3D" + tableName);
+	window.open("sys_metadata_list.do?sysparm_query=GOTO123TEXTQUERY321=" + tableName +'^GROUPBYsys_class_name');
 }
 
-//sys_metadata_list.do?sysparm_query=GOTO123TEXTQUERY321%3Dchange_request&sysparm_view=
 
 function getSelectedTableName() {
     var ts = document.getElementById("tables");
@@ -263,7 +261,7 @@ function tcColumnRequestCustom(evt) {
 	</tr>
 
 	<j2:if test="$[gs.hasRole('admin')]">
-		<tr>
+		<tr valign="top">
 			<td>$[SP]</td>
 		</tr>
 		<tr valign="top">
@@ -378,13 +376,13 @@ function tcColumnRequestCustom(evt) {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-06-24 14:59:06</sys_created_on>
         <sys_id>43b51b1d2f941110916d50492799b609</sys_id>
-        <sys_mod_count>8</sys_mod_count>
+        <sys_mod_count>16</sys_mod_count>
         <sys_name>table_configurations</sys_name>
         <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
         <sys_policy/>
         <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
         <sys_update_name>sys_ui_page_43b51b1d2f941110916d50492799b609</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2022-06-26 07:02:52</sys_updated_on>
+        <sys_updated_on>2022-08-02 09:38:19</sys_updated_on>
     </sys_ui_page>
 </record_update>
