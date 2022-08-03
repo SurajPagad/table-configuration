@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
     <sys_ui_page action="INSERT_OR_UPDATE">
         <category>general</category>
-        <client_script><![CDATA[function getArtifacts() {
+        <client_script><![CDATA[$j(".rotate").click(function() {
+	alert('rotate test');
+     $j(this).toggleClass("down");
+});
+
+function getArtifacts() {
     gel('response').innerText = 'Loading...';
     var appID = gel('app').value;
     if (appID) {
@@ -17,12 +22,10 @@
         var artifacts = parsedAnswer.artifacts;
         var instanceName = parsedAnswer.instance_name;
         var outerList = document.createElement("ul");
+        outerList.setAttribute('style', 'list-style:none');
         artifacts.forEach(function(artifact) {
             var artifactItem = document.createElement("li");
-			var artifactItemLabel =  document.createElement("span");
-			artifactItemLabel.innerText = artifact.name;
-            artifactItemLabel.setAttribute('data-toggle', 'collapse');
-            artifactItemLabel.setAttribute('data-target', '#' + artifact.name.replaceAll(/[\s|&]/g, ''));
+            var artifactItemLabel = createListLabel(artifact.name);
             artifactItem.appendChild(artifactItemLabel);
             var artifactTypes = artifact.types ? artifact.types : [];
             if (checkAllArtifactType(artifactTypes)) {
@@ -34,11 +37,10 @@
                     var artifactTypeName = artifactType.name;
                     var metaDataFiles = artifactType.artifacts ? artifactType.artifacts : [];
                     if (metaDataFiles.length > 0) {
-                        var typeItem = document.createElement("li");
-                        typeItem.setAttribute('data-toggle', 'collapse');
-                        typeItem.setAttribute('data-target', '#' + artifactTypeName.replaceAll(/[\s|&]/g, ''));
-                        typeItem.innerText = artifactTypeName;
-                        artifactTypeList.appendChild(typeItem);
+                        var artifacttypeItem = document.createElement("li");
+                        var artifacttypeLabel = createListLabel(artifactType.name);
+                        artifacttypeItem.appendChild(artifacttypeLabel);
+                        artifactTypeList.appendChild(artifacttypeItem);
                         var metaDataList = createMetaDataFileLink(metaDataFiles, artifactType, instanceName);
                         artifactTypeList.appendChild(metaDataList);
                     }
@@ -58,6 +60,19 @@ function checkAllArtifactType(artifactTypes) {
         if (artifacts)
             return artifacts.length > 0;
     });
+}
+
+function createListLabel(label) {
+    var itemCollapse = document.createElement('span');
+    itemCollapse.setAttribute('data-toggle', 'collapse');
+    itemCollapse.setAttribute('data-target', '#' + label.replaceAll(/[\s|&]/g, ''));
+    var icon = document.createElement("i");
+    icon.setAttribute('class', 'icon-chevron-right rotate');
+    var itemLabel = document.createElement("span");
+    itemLabel.innerText = label;
+    itemCollapse.appendChild(icon);
+    itemCollapse.appendChild(itemLabel);
+    return itemCollapse;
 }
 
 function createMetaDataFileLink(metaDataFiles, artifactType, instanceName) {
@@ -84,21 +99,47 @@ function createMetaDataFileLink(metaDataFiles, artifactType, instanceName) {
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
      <p>Select an application to fetch the artifacts</p>
 	 <g:ui_reference name="app" id="app_id" table="sys_scope" query="active=true" completer="AJAXTableCompleter" onchange="getArtifacts()" columns="scope"/>
-	<div id='response'></div>
-</j:jelly>]]></html>
+	<div id='response'>
+	</div>
+	<style>
+		ul {
+			list-style:none
+		}
+		i {
+			 margin-right:5px
+		}
+		.rotate {
+			-moz-transition: all .5s linear;
+			-webkit-transition: all .5s linear;
+			transition: all .5s linear;
+		}
+		.rotate.down {
+			-moz-transform:rotate(90deg);
+			-webkit-transform:rotate(90deg);
+			transform:rotate(90deg);
+		}
+	</style>
+	<script>
+		$j(".rotate").click(function () {
+		alert('rotate')
+			$j(this).toggleClass("down");
+		});
+	</script>
+</j:jelly>
+]]></html>
         <name>application_explorer</name>
         <processing_script/>
         <sys_class_name>sys_ui_page</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-07-27 08:02:06</sys_created_on>
         <sys_id>7333f7f72f701110916d50492799b64c</sys_id>
-        <sys_mod_count>93</sys_mod_count>
+        <sys_mod_count>127</sys_mod_count>
         <sys_name>application_explorer</sys_name>
         <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
         <sys_policy/>
         <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
         <sys_update_name>sys_ui_page_7333f7f72f701110916d50492799b64c</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2022-08-02 13:16:51</sys_updated_on>
+        <sys_updated_on>2022-08-03 16:09:53</sys_updated_on>
     </sys_ui_page>
 </record_update>
