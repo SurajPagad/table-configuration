@@ -14,48 +14,52 @@
     function callBack(response) {
         var answer = response.responseXML.documentElement.getAttribute("answer");
         var parsedAnswer = JSON.parse(answer);
-        var artifacts = parsedAnswer.artifacts;
-        var instanceName = parsedAnswer.instance_name;
-        var outerList = document.createElement("ul");
-        outerList.setAttribute('style', 'list-style:none');
-        artifacts.forEach(function(artifact) {
-            var artifactItem = document.createElement("li");
-            var artifactItemLabel = createListLabel(artifact.name);
-            artifactItem.appendChild(artifactItemLabel);
-            var artifactTypes = artifact.types ? artifact.types : [];
-            if (checkAllArtifactType(artifactTypes)) {
-                var artifactTypeList = document.createElement("ul");
-                artifactTypeList.setAttribute('class', 'collapse in collapsible-type-list');
-                artifactTypeList.setAttribute('id', artifact.name.replaceAll(/[\s|&]/g, ''));
-                artifactItem.appendChild(artifactTypeList);
-                artifactTypes.forEach(function(artifactType) {
-                    var artifactTypeName = artifactType.name;
-                    var metaDataFiles = artifactType.artifacts ? artifactType.artifacts : [];
-                    if (metaDataFiles.length > 0) {
-                        var artifacttypeItem = document.createElement("li");
-                        var artifacttypeLabel = createListLabel(artifactType.name);
-                        artifacttypeItem.appendChild(artifacttypeLabel);
-                        var metaDataList = createMetaDataFileLink(metaDataFiles, artifactType, instanceName);
-                        artifacttypeItem.appendChild(metaDataList);
-                        artifactTypeList.appendChild(artifacttypeItem);
-                    }
-
-                });
-                outerList.appendChild(artifactItem);
-            }
-        });
-        gel('response').innerText = '';
-        gel('response').appendChild(outerList);
-        function toggleChevron(e) {
-            $j(e.target)
-                .prev('.list-label')
-                .find('i.rotate')
-                .toggleClass('icon-chevron-right icon-chevron-down');
-        }
-
-        $j('.collapsible-type-list').on('hidden.bs.collapse', toggleChevron);
-        $j('.collapsible-type-list').on('shown.bs.collapse', toggleChevron);
+        drawResponse(parsedAnswer);
     }
+}
+
+function drawResponse(parsedAnswer) {
+    var artifacts = parsedAnswer.artifacts;
+    var instanceName = parsedAnswer.instance_name;
+    var outerList = document.createElement("ul");
+    outerList.setAttribute('style', 'list-style:none');
+    artifacts.forEach(function(artifact) {
+        var artifactItem = document.createElement("li");
+        var artifactItemLabel = createListLabel(artifact.name);
+        artifactItem.appendChild(artifactItemLabel);
+        var artifactTypes = artifact.types ? artifact.types : [];
+        if (checkAllArtifactType(artifactTypes)) {
+            var artifactTypeList = document.createElement("ul");
+            artifactTypeList.setAttribute('class', 'collapse in collapsible-type-list');
+            artifactTypeList.setAttribute('id', artifact.name.replaceAll(/[\s|&]/g, ''));
+            artifactItem.appendChild(artifactTypeList);
+            artifactTypes.forEach(function(artifactType) {
+                var artifactTypeName = artifactType.name;
+                var metaDataFiles = artifactType.artifacts ? artifactType.artifacts : [];
+                if (metaDataFiles.length > 0) {
+                    var artifacttypeItem = document.createElement("li");
+                    var artifacttypeLabel = createListLabel(artifactType.name);
+                    artifacttypeItem.appendChild(artifacttypeLabel);
+                    var metaDataList = createMetaDataFileLink(metaDataFiles, artifactType, instanceName);
+                    artifacttypeItem.appendChild(metaDataList);
+                    artifactTypeList.appendChild(artifacttypeItem);
+                }
+
+            });
+            outerList.appendChild(artifactItem);
+        }
+    });
+    gel('response').innerText = '';
+    gel('response').appendChild(outerList);
+    $j('.collapsible-type-list').on('hidden.bs.collapse', toggleChevron);
+    $j('.collapsible-type-list').on('shown.bs.collapse', toggleChevron);
+}
+
+function toggleChevron(e) {
+    $j(e.target)
+        .prev('.list-label')
+        .find('i.rotate')
+        .toggleClass('icon-chevron-right icon-chevron-down');
 }
 
 function checkAllArtifactType(artifactTypes) {
@@ -91,8 +95,11 @@ function createMetaDataFileLink(metaDataFiles, artifactType, instanceName) {
         var metaDataFileLink = document.createElement("a");
         metaDataFileLink.href = 'https://' + instanceName + '.service-now.com/' + artifactType.id + '.do?sys_id=' + metaDataFileSysID;
         metaDataFileLink.target = '_blank';
-        metaDataFileLink.innerText = metaDataFileName +' '+metaDataFile.isCustomized;
+        metaDataFileLink.innerText = metaDataFileName;
         metaDataFileItem.appendChild(metaDataFileLink);
+        var isCustomized = document.createElement("span");
+        isCustomized.innerText = metaDataFile.isCustomized?' Customized':'';
+        metaDataFileItem.appendChild(isCustomized);
         metaDataList.appendChild(metaDataFileItem);
     });
     return metaDataList;
@@ -122,13 +129,13 @@ function createMetaDataFileLink(metaDataFiles, artifactType, instanceName) {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-07-27 08:02:06</sys_created_on>
         <sys_id>7333f7f72f701110916d50492799b64c</sys_id>
-        <sys_mod_count>164</sys_mod_count>
+        <sys_mod_count>168</sys_mod_count>
         <sys_name>application_explorer</sys_name>
         <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
         <sys_policy/>
         <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
         <sys_update_name>sys_ui_page_7333f7f72f701110916d50492799b64c</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2022-08-05 15:28:55</sys_updated_on>
+        <sys_updated_on>2022-08-06 08:00:11</sys_updated_on>
     </sys_ui_page>
 </record_update>
