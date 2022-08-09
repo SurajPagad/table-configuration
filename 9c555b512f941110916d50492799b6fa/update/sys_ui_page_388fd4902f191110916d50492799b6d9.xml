@@ -25,8 +25,16 @@ sampleApps.controller('mainCtrl', function($scope) {
         $scope.$apply();
     });
 
-    $scope.getlink = function(artifactItem, tableName) {
-        return 'https://dev88983.service-now.com/' + tableName + '.do?sys_id=' + artifactItem.sysId;
+    $scope.removeSpecialChars = function(name) {
+        return name.replaceAll(/[\s|&]/g, '');
+    };
+
+    $scope.toggleIcon = function(event) {
+        $j(event.target).find('i.rotate').toggleClass('icon-chevron-right icon-chevron-down');
+    };
+
+    $scope.getlink = function(artifactItem) {
+        return '/sys_metadata.do?sys_id=' + artifactItem.sysId;
     };
 
     $scope.hasArtifacts = function(types) {
@@ -35,96 +43,11 @@ sampleApps.controller('mainCtrl', function($scope) {
         });
     };
 
-    //     $scope.drawResponse = function(parsedAnswer) {
-    //         var artifacts = parsedAnswer.artifacts;
-    //         var instanceName = parsedAnswer.instance_name;
-    //         var outerList = document.createElement("ul");
-    //         outerList.setAttribute('style', 'list-style:none');
-    //         artifacts.forEach(function(artifact) {
-    //             var artifactItem = document.createElement("li");
-    //             var artifactItemLabel = createListLabel(artifact.name);
-    //             artifactItem.appendChild(artifactItemLabel);
-    //             var artifactTypes = artifact.types ? artifact.types : [];
-    //             if (checkAllArtifactType(artifactTypes)) {
-    //                 var artifactTypeList = document.createElement("ul");
-    //                 artifactTypeList.setAttribute('class', 'collapse in collapsible-type-list');
-    //                 artifactTypeList.setAttribute('id', artifact.name.replaceAll(/[\s|&]/g, ''));
-    //                 artifactItem.appendChild(artifactTypeList);
-    //                 artifactTypes.forEach(function(artifactType) {
-    //                     var artifactTypeName = artifactType.name;
-    //                     var metaDataFiles = artifactType.artifacts ? artifactType.artifacts : [];
-    //                     if (metaDataFiles.length > 0) {
-    //                         var artifacttypeItem = document.createElement("li");
-    //                         var artifacttypeLabel = createListLabel(artifactType.name);
-    //                         artifacttypeItem.appendChild(artifacttypeLabel);
-    //                         var metaDataList = createMetaDataFileLink(metaDataFiles, artifactType, instanceName);
-    //                         artifacttypeItem.appendChild(metaDataList);
-    //                         artifactTypeList.appendChild(artifacttypeItem);
-    //                     }
-
-    //                 });
-    //                 outerList.appendChild(artifactItem);
-    //             }
-    //         });
-    //         gel('response').innerText = '';
-    //         gel('response').appendChild(outerList);
-    //         $j('.collapsible-type-list').on('hidden.bs.collapse', toggleChevron);
-    //         $j('.collapsible-type-list').on('shown.bs.collapse', toggleChevron);
-    //     };
 });
 
 function setHiddenInput() {
     $j('#app_id_hidden').val(gel('app').value).trigger('change');
-}
-
-
-// function toggleChevron(e) {
-//     $j(e.target)
-//         .prev('.list-label')
-//         .find('i.rotate')
-//         .toggleClass('icon-chevron-right icon-chevron-down');
-// }
-
-// function checkAllArtifactType(artifactTypes) {
-//     return artifactTypes.some(function(artifactType) {
-//         var artifacts = artifactType.artifacts;
-//         if (artifacts)
-//             return artifacts.length > 0;
-//     });
-// }
-
-// function createListLabel(label) {
-//     var itemCollapse = document.createElement('span');
-//     itemCollapse.setAttribute('data-toggle', 'collapse');
-//     itemCollapse.setAttribute('data-target', '#' + label.replaceAll(/[\s|&]/g, ''));
-//     itemCollapse.setAttribute('class', 'list-label');
-//     var icon = document.createElement("i");
-//     icon.setAttribute('class', 'icon-chevron-down rotate');
-//     var itemLabel = document.createElement("span");
-//     itemLabel.innerText = label;
-//     itemCollapse.appendChild(icon);
-//     itemCollapse.appendChild(itemLabel);
-//     return itemCollapse;
-// }
-
-// function createMetaDataFileLink(metaDataFiles, artifactType, instanceName) {
-//     var metaDataList = document.createElement("ul");
-//     metaDataList.setAttribute('class', 'collapse in collapsible-file-list');
-//     metaDataList.setAttribute('id', artifactType.name.replaceAll(/[\s|&]/g, ''));
-//     metaDataFiles.forEach(function(metaDataFile) {
-//         var metaDataFileName = metaDataFile.name;
-//         var metaDataFileSysID = metaDataFile.sysId;
-//         var metaDataFileItem = document.createElement("li");
-//         var metaDataFileLink = document.createElement("a");
-//         var tableName = artifactType.id == 'wf_workflow' ? 'wf_workflow_version' : artifactType.id;
-//         metaDataFileLink.href = 'https://' + instanceName + '.service-now.com/' + tableName + '.do?sys_id=' + metaDataFileSysID;
-//         metaDataFileLink.target = '_blank';
-//         metaDataFileLink.innerText = metaDataFileName;
-//         metaDataFileItem.appendChild(metaDataFileLink);
-//         metaDataList.appendChild(metaDataFileItem);
-//     });
-//     return metaDataList;
-// }]]></client_script>
+}]]></client_script>
         <description/>
         <direct>false</direct>
         <endpoint/>
@@ -145,19 +68,27 @@ function setHiddenInput() {
                 <ul ng-if="artifacts.length > 0 &amp;&amp; !loading">
                     <li ng-repeat="artifact in artifacts">
                         <span ng-if="hasArtifacts(artifact.types)">
-                            {{ artifact.name }}
-                            <ul ng-if="artifact.types &amp;&amp; artifact.types.length > 0">
-                                <li ng-repeat="type in artifact.types">
-                                    <span ng-if="type.artifacts &amp;&amp; type.artifacts.length > 0">{{ type.name }}
-                                        <ul ng-if="type.artifacts.length > 0">
-                                            <li ng-repeat="artifactItem in type.artifacts">
-                                                <a href='{{getlink(artifactItem,type.id)}}'
-                                                    target='_blank'>{{artifactItem.name}}</a>
-                                            </li>
-                                        </ul>
-                                    </span>
-                                </li>
-                            </ul>
+                            <span data-toggle="collapse" data-target="{{'#'+removeSpecialChars(artifact.name)}}" ng-click="toggleIcon($event)" class="list-label"><i
+                                    class="icon-chevron-down rotate"></i>{{ artifact.name }}</span>
+                            <span ng-if="artifact.types &amp;&amp; artifact.types.length > 0">
+                                <ul class="collapse in collapsible-list" id="{{removeSpecialChars(artifact.name)}}">
+                                    <li ng-repeat="type in artifact.types">
+                                        <span ng-if="type.artifacts &amp;&amp; type.artifacts.length > 0">
+                                            <span data-toggle="collapse"
+                                                data-target="{{'#'+removeSpecialChars(type.name)}}" ng-click="toggleIcon($event)" class="list-label"><i
+                                                    class="icon-chevron-down rotate"></i>{{ type.name }}</span>
+                                            <span ng-if="type.artifacts.length > 0">
+                                                <ul class="collapse in collapsible-list" id="{{removeSpecialChars(type.name)}}">
+                                                    <li ng-repeat="artifactItem in type.artifacts">
+                                                        <a href='{{getlink(artifactItem)}}'
+                                                            target='_blank'>{{artifactItem.name}}</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </span>
                         </span>
                     </li>
                 </ul>
@@ -173,17 +104,6 @@ function setHiddenInput() {
         i {
             margin-right: 5px
         }
-
-        .loader {
-            border: 16px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 16px solid #3498db;
-            width: 120px;
-            height: 120px;
-            -webkit-animation: spin 2s linear infinite;
-            /* Safari */
-            animation: spin 2s linear infinite;
-        }
     </style>
 </j:jelly>]]></html>
         <name>application_explorer_new</name>
@@ -192,13 +112,13 @@ function setHiddenInput() {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-08-09 16:09:42</sys_created_on>
         <sys_id>388fd4902f191110916d50492799b6d9</sys_id>
-        <sys_mod_count>0</sys_mod_count>
+        <sys_mod_count>1</sys_mod_count>
         <sys_name>application_explorer_new</sys_name>
         <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
         <sys_policy/>
         <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
         <sys_update_name>sys_ui_page_388fd4902f191110916d50492799b6d9</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2022-08-09 16:09:42</sys_updated_on>
+        <sys_updated_on>2022-08-09 18:40:39</sys_updated_on>
     </sys_ui_page>
 </record_update>
