@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
+    <sys_ui_page action="DELETE">
+        <category/>
+        <client_script><![CDATA[function getArtifacts() {
+    gel('response').innerText = 'Loading...';
+    var appID = gel('app').value;
+    if (appID) {
+        var ga = new GlideAjax('GetAppArtifacts');
+        ga.addParam('sysparm_name', 'getAppArtifacts');
+        ga.addParam('sysparm_app_id', appID);
+        ga.getXML(callBack);
+    }
+
+    function callBack(response) {
+        var answer = response.responseXML.documentElement.getAttribute("answer");
+        var parsedAnswer = JSON.parse(answer);
+        drawResponse(parsedAnswer);
+    }
+}
+
+function drawResponse(parsedAnswer) {
+    var artifacts = parsedAnswer.artifacts;
+    var instanceName = parsedAnswer.instance_name;
+    var outerList = document.createElement("ul");
+    outerList.setAttribute('style', 'list-style:none');
+    artifacts.forEach(function(artifact) {
+        var artifactItem = document.createElement("li");
+        var artifactItemLabel = createListLabel(artifact.name);
+        artifactItem.appendChild(artifactItemLabel);
+        var artifactTypes = artifact.types ? artifact.types : [];
+        if (checkAllArtifactType(artifactTypes)) {
+            var artifactTypeList = document.createElement("ul");
+            artifactTypeList.setAttribute('class', 'collapse in collapsible-type-list');
+            artifactTypeList.setAttribute('id', artifact.name.replaceAll(/[\s|&]/g, ''));
+            artifactItem.appendChild(artifactTypeList);
+            artifactTypes.forEach(function(artifactType) {
+                var artifactTypeName = artifactType.name;
+                var metaDataFiles = artifactType.artifacts ? artifactType.artifacts : [];
+                if (metaDataFiles.length > 0) {
+                    var artifacttypeItem = document.createElement("li");
+                    var artifacttypeLabel = createListLabel(artifactType.name);
+                    artifacttypeItem.appendChild(artifacttypeLabel);
+                    var metaDataList = createMetaDataFileLink(metaDataFiles, artifactType, instanceName);
+                    artifacttypeItem.appendChild(metaDataList);
+                    artifactTypeList.appendChild(artifacttypeItem);
+                }
+
+            });
+            outerList.appendChild(artifactItem);
+        }
+    });
+    gel('response').innerText = '';
+    gel('response').appendChild(outerList);
+    $j('.collapsible-type-list').on('hidden.bs.collapse', toggleChevron);
+    $j('.collapsible-type-list').on('shown.bs.collapse', toggleChevron);
+}
+
+function toggleChevron(e) {
+    $j(e.target)
+        .prev('.list-label')
+        .find('i.rotate')
+        .toggleClass('icon-chevron-right icon-chevron-down');
+}
+
+function checkAllArtifactType(artifactTypes) {
+    return artifactTypes.some(function(artifactType) {
+        var artifacts = artifactType.artifacts;
+        if (artifacts)
+            return artifacts.length > 0;
+    });
+}
+
+function createListLabel(label) {
+    var itemCollapse = document.createElement('span');
+    itemCollapse.setAttribute('data-toggle', 'collapse');
+    itemCollapse.setAttribute('data-target', '#' + label.replaceAll(/[\s|&]/g, ''));
+    itemCollapse.setAttribute('class', 'list-label');
+    var icon = document.createElement("i");
+    icon.setAttribute('class', 'icon-chevron-down rotate');
+    var itemLabel = document.createElement("span");
+    itemLabel.innerText = label;
+    itemCollapse.appendChild(icon);
+    itemCollapse.appendChild(itemLabel);
+    return itemCollapse;
+}
+
+function createMetaDataFileLink(metaDataFiles, artifactType, instanceName) {
+    var metaDataList = document.createElement("ul");
+    metaDataList.setAttribute('class', 'collapse in collapsible-file-list');
+    metaDataList.setAttribute('id', artifactType.name.replaceAll(/[\s|&]/g, ''));
+    metaDataFiles.forEach(function(metaDataFile) {
+        var metaDataFileName = metaDataFile.name;
+        var metaDataFileSysID = metaDataFile.sysId;
+        var metaDataFileItem = document.createElement("li");
+        var metaDataFileLink = document.createElement("a");
+        var tableName = artifactType.id == 'wf_workflow' ? 'wf_workflow_version' : artifactType.id;
+        metaDataFileLink.href = 'https://' + instanceName + '.service-now.com/' + tableName + '.do?sys_id=' + metaDataFileSysID;
+        metaDataFileLink.target = '_blank';
+        metaDataFileLink.innerText = metaDataFileName;
+        metaDataFileItem.appendChild(metaDataFileLink);
+        metaDataList.appendChild(metaDataFileItem);
+    });
+    return metaDataList;
+}]]></client_script>
+        <description/>
+        <direct>false</direct>
+        <endpoint/>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+     <p>Select an application to fetch the artifacts</p>
+	 <g:ui_reference name="app" id="app_id" table="sys_scope" query="active=true" completer="AJAXTableCompleter" onchange="getArtifacts()" columns="scope"/>
+	<div id='response'>
+	</div>
+	<style>
+		ul {
+			list-style:none
+		}
+		i {
+			 margin-right:5px
+		}
+	</style>
+</j:jelly>
+]]></html>
+        <name>application_explorer</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-07-27 08:02:06</sys_created_on>
+        <sys_id>7333f7f72f701110916d50492799b64c</sys_id>
+        <sys_mod_count>174</sys_mod_count>
+        <sys_name>application_explorer</sys_name>
+        <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
+        <sys_update_name>sys_ui_page_7333f7f72f701110916d50492799b64c</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-08-09 08:19:24</sys_updated_on>
+    </sys_ui_page>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Table configuration">9c555b512f941110916d50492799b6fa</application>
+        <file_path/>
+        <instance_id>3ef751bddb92ff40f492c59705961990</instance_id>
+        <instance_name>dev88983</instance_name>
+        <name>sys_ui_page_7333f7f72f701110916d50492799b64c</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ui_page"&gt;&lt;sys_ui_page action="INSERT_OR_UPDATE"&gt;&lt;category/&gt;&lt;client_script&gt;&lt;![CDATA[function getArtifacts() {
+    gel('response').innerText = 'Loading...';
+    var appID = gel('app').value;
+    if (appID) {
+        var ga = new GlideAjax('GetAppArtifacts');
+        ga.addParam('sysparm_name', 'getAppArtifacts');
+        ga.addParam('sysparm_app_id', appID);
+        ga.getXML(callBack);
+    }
+
+    function callBack(response) {
+        var answer = response.responseXML.documentElement.getAttribute("answer");
+        var parsedAnswer = JSON.parse(answer);
+        drawResponse(parsedAnswer);
+    }
+}
+
+function drawResponse(parsedAnswer) {
+    var artifacts = parsedAnswer.artifacts;
+    var instanceName = parsedAnswer.instance_name;
+    var outerList = document.createElement("ul");
+    outerList.setAttribute('style', 'list-style:none');
+    artifacts.forEach(function(artifact) {
+        var artifactItem = document.createElement("li");
+        var artifactItemLabel = createListLabel(artifact.name);
+        artifactItem.appendChild(artifactItemLabel);
+        var artifactTypes = artifact.types ? artifact.types : [];
+        if (checkAllArtifactType(artifactTypes)) {
+            var artifactTypeList = document.createElement("ul");
+            artifactTypeList.setAttribute('class', 'collapse in collapsible-type-list');
+            artifactTypeList.setAttribute('id', artifact.name.replaceAll(/[\s|&amp;]/g, ''));
+            artifactItem.appendChild(artifactTypeList);
+            artifactTypes.forEach(function(artifactType) {
+                var artifactTypeName = artifactType.name;
+                var metaDataFiles = artifactType.artifacts ? artifactType.artifacts : [];
+                if (metaDataFiles.length &gt; 0) {
+                    var artifacttypeItem = document.createElement("li");
+                    var artifacttypeLabel = createListLabel(artifactType.name);
+                    artifacttypeItem.appendChild(artifacttypeLabel);
+                    var metaDataList = createMetaDataFileLink(metaDataFiles, artifactType, instanceName);
+                    artifacttypeItem.appendChild(metaDataList);
+                    artifactTypeList.appendChild(artifacttypeItem);
+                }
+
+            });
+            outerList.appendChild(artifactItem);
+        }
+    });
+    gel('response').innerText = '';
+    gel('response').appendChild(outerList);
+    $j('.collapsible-type-list').on('hidden.bs.collapse', toggleChevron);
+    $j('.collapsible-type-list').on('shown.bs.collapse', toggleChevron);
+}
+
+function toggleChevron(e) {
+    $j(e.target)
+        .prev('.list-label')
+        .find('i.rotate')
+        .toggleClass('icon-chevron-right icon-chevron-down');
+}
+
+function checkAllArtifactType(artifactTypes) {
+    return artifactTypes.some(function(artifactType) {
+        var artifacts = artifactType.artifacts;
+        if (artifacts)
+            return artifacts.length &gt; 0;
+    });
+}
+
+function createListLabel(label) {
+    var itemCollapse = document.createElement('span');
+    itemCollapse.setAttribute('data-toggle', 'collapse');
+    itemCollapse.setAttribute('data-target', '#' + label.replaceAll(/[\s|&amp;]/g, ''));
+    itemCollapse.setAttribute('class', 'list-label');
+    var icon = document.createElement("i");
+    icon.setAttribute('class', 'icon-chevron-down rotate');
+    var itemLabel = document.createElement("span");
+    itemLabel.innerText = label;
+    itemCollapse.appendChild(icon);
+    itemCollapse.appendChild(itemLabel);
+    return itemCollapse;
+}
+
+function createMetaDataFileLink(metaDataFiles, artifactType, instanceName) {
+    var metaDataList = document.createElement("ul");
+    metaDataList.setAttribute('class', 'collapse in collapsible-file-list');
+    metaDataList.setAttribute('id', artifactType.name.replaceAll(/[\s|&amp;]/g, ''));
+    metaDataFiles.forEach(function(metaDataFile) {
+        var metaDataFileName = metaDataFile.name;
+        var metaDataFileSysID = metaDataFile.sysId;
+        var metaDataFileItem = document.createElement("li");
+        var metaDataFileLink = document.createElement("a");
+        var tableName = artifactType.id == 'wf_workflow' ? 'wf_workflow_version' : artifactType.id;
+        metaDataFileLink.href = 'https://' + instanceName + '.service-now.com/' + tableName + '.do?sys_id=' + metaDataFileSysID;
+        metaDataFileLink.target = '_blank';
+        metaDataFileLink.innerText = metaDataFileName;
+        metaDataFileItem.appendChild(metaDataFileLink);
+        metaDataList.appendChild(metaDataFileItem);
+    });
+    return metaDataList;
+}]]&gt;&lt;/client_script&gt;&lt;description/&gt;&lt;direct&gt;false&lt;/direct&gt;&lt;endpoint/&gt;&lt;html&gt;&lt;![CDATA[&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null"&gt;
+     &lt;p&gt;Select an application to fetch the artifacts&lt;/p&gt;
+	 &lt;g:ui_reference name="app" id="app_id" table="sys_scope" query="active=true" completer="AJAXTableCompleter" onchange="getArtifacts()" columns="scope"/&gt;
+	&lt;div id='response'&gt;
+	&lt;/div&gt;
+	&lt;style&gt;
+		ul {
+			list-style:none
+		}
+		i {
+			 margin-right:5px
+		}
+	&lt;/style&gt;
+&lt;/j:jelly&gt;
+]]&gt;&lt;/html&gt;&lt;name&gt;application_explorer&lt;/name&gt;&lt;processing_script/&gt;&lt;sys_class_name&gt;sys_ui_page&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2022-07-27 08:02:06&lt;/sys_created_on&gt;&lt;sys_id&gt;7333f7f72f701110916d50492799b64c&lt;/sys_id&gt;&lt;sys_mod_count&gt;174&lt;/sys_mod_count&gt;&lt;sys_name&gt;application_explorer&lt;/sys_name&gt;&lt;sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa"&gt;9c555b512f941110916d50492799b6fa&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Table configuration"&gt;9c555b512f941110916d50492799b6fa&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ui_page_7333f7f72f701110916d50492799b64c&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2022-08-09 08:19:24&lt;/sys_updated_on&gt;&lt;/sys_ui_page&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>-374167116</payload_hash>
+        <record_name>application_explorer</record_name>
+        <reverted_from display_value="sys_ui_page_7333f7f72f701110916d50492799b64c">b304364c2f111110916d50492799b6e2</reverted_from>
+        <source>c6cb37152f981110916d50492799b662</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-08-09 10:13:08</sys_created_on>
+        <sys_id>751e8b8c2f911110916d50492799b6f6</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>182821804c40000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-08-09 10:13:08</sys_updated_on>
+        <type>UI Page</type>
+        <update_guid>b51e8b8c5c911110654d5f3c4a683df3</update_guid>
+        <update_guid_history>b51e8b8c5c911110654d5f3c4a683df3:-374167116,30ad0b8cd491111091e8fb50e48bb85b:-1818639301,363dc7888d911110deade160e46d9771:-2080091833,78ecc788249111102e6a142646f79a6d:-586245706,fe2c0b887e91111082108784065f7e50:1160414076,b2fb8bc87e911110a7ee7ca35936315e:-428920995,67bb8bc8fb91111071697b0a48c0b181:1160414076,0ffac344fc9111103db57150d3b433ae:234147321,058ac788f09111100147ff01b9c9d54b:-1020913652,2922c78c0a511110e9bdbc983275e783:1707687763,7b04364ce0111110467c01bb4a8957e1:-374167116,5fa036441b111110301a892f584075aa:415321344,85d0422fd5c99110221c555cebdaa40f:1279042015,c280c6af43c99110d20b92359dadc593:415321344,5f5f712fc5c99110ccda844be8505b04:346112577,e90ff92f16c991105da186186966358a:1840566535,8d26df8f2c015110c816886ed85c0e8c:1368611531,8ac51f8fd3015110997ee1b26193a050:0,c9e29f8bf301511004dea376249e2274:1368611531,4e325f0b29015110338e55008f57739c:-211050215,c1405f0b970151101a0e09e87febe64f:599043308,309f83872e0151102f2cc7b77d255f93:425138272,6c007b32738111106d971664bf34a9f7:613263319,024c2b32ad811110399a192dc881868e:-1040170445,8d0c2b323b8111102053b5d37d688888:-1406372280,79dbeffe3a411110762e719b1a836330:-748877983,b959b0a249c15110bbeae72625a12d00:-1040170445,7f987822c2c151105d505c9a6bb4db41:1579243012,5a68302286c15110789299868adb22be:-1979100468,f9487822f2c15110d5ceeef83f00453d:559309356,eeb734ee358151105eb7ba9a9f5af5c1:76947326,d247302232c15110e561ca2e35d44b3c:1390445530,dd35b02ef78151109c96f149bbf7d6e6:-766403909,07f4b82e088151103b146ce07e1139aa:161575416,4de3f02ea4815110f86197820fe67457:978908351,5473b4eae5815110f9f232ba6c53ea51:-1601494003,3f4330aad581511008a258f4b3bd9250:1187154197,d9333cea01815110543d3de5c3ab4b2e:788105189,7bb2b4ea338151105e589e2ea7f43d4a:936654101,8c82fcaa1681511011e51173ae6a1365:-107628796,a552fcaa238151107ea2f9c86eaf5f1b:-1197139350,7271302ae4815110131162e627883e7b:939702655,51503c2ae8815110d48aaefce6877bff:-479335692,24df24a67e815110cff0bcbfa7f753ed:-26101208,602e24a61781511014d666ca0541f3e9:66306911,a4ed2c66658151109fe8a0022be0d1c2:450463180,33ad20e2a681511033ebd5d1d1534731:584109228,311b642263815110bffa3363818aed0c:-1508647930,ffea6c22078151102692757bfc5b44e9:-803519780,e88a6c224d81511049b9500ad4ada0ac:-772680962,49d86cea38415110707e3153f6b84123:-2025837951,024824227f815110a3099b98feff9479:879842433,7a446cea52415110d16e32e67dcd0143:1186836876,140420ea0f4151104b6058c1eac9f636:-377707385,c4e324eaaf4151109fd6b7edb1e08314:-1545591550,14c3e4eaed415110b6282af0c2ffd4c1:1278300301,6ca364ea87415110ac646c90974c6691:131637479,fd836c2a46415110c747a499b2424382:15008266,a15320eab741511057cf3f0551c5be2e:1478487583,0936699aec4511106e9c8664d5a88662:-1549260407,9426edda61451110bc1122e1a757ff69:-2015793143,50d5219a35451110f5130f31f6366b6a:-1827327979,8c75edda1945111038eee6444cb66a2d:1488680053,7e35e9da32451110881050b1912b3bba:112261027,3594699a9e451110f97bb8a396f71b47:1951200721,4204219aed45111094ca058f9a6f82d5:-1292111451,2793291adf45111016e2b87141ed14cb:-958933181,eef2291a964511105a57cc6996e11cc5:-1653253158,a642a5d63245111064d7d74a80806b39:-1149517936,830121d62d45111096afa46e341c4188:-1981406510,5ec0ed969e45111066bde989134b8880:-430920334,3e40e116d24511103a50437521ce7ec8:-131131231,9ece5d166145111052e9762f3f5c857c:852329744,28bd159eb2051110c8fe8b85c1ff9d26:-1878565279,1b5d9d9246451110de6ec688fb2db8bf:2026695951,87bcd59e4e05111090b5569a2ee4397b:-1681446233,077c5112134511104242b9c56fb8f7cf:-66117360,c9ba555ea105111003c3a45f70c04ec4:184322553,7d1ad59e8b0511104724bb5f686bf266:-1555521647,969899da0e051110209732e8b04be7b5:-1137193660,9368915e5d0511102698dcb77dcff32d:320258742,0f87915ebd051110ed5fbcbf73903c26:-1251456196,164715dad205111063df5d7c00676d51:2003212381,8b0699da09051110ec0513c7a094a573:-479797379,04e555daf6051110bad9593526080a32:248145494,3985595a8b051110c5c15bd05562f660:-1151967049,10d4d5d60f051110a227e3894f6a75cf:192907200,9ee3595a260511104a8b14edaa9a4330:358511381,e0d351d2a50511109f7dbd31293a6a5c:1170393845,c583915a8f051110ec704956d7ffdcbd:358511381,95439d1ad005111089ec8c7ee397fa5c:-782007240,abf119d63c051110bd0af6ac93c6d710:-1379690564,fcb15556930511102489c8ce8e52dc0c:1145298379,bc05377187851110433373fd1e8f526a:1109829047,d973f33183851110979763087f849a57:-316926479,713333fd3d451110677f5dc49712750a:-554641386,02037fbd1a451110e1868ef3dbff4335:-1139464168,ee72ffbd84451110ab0229b9dc644bf8:217531109,1c527f7d7a451110b71da24cb5449ea1:920863038,74413f3dbb4511108b0f36f5838916b8:217531109,01f0b731a4451110c95c307263a5bdb2:-90173869,dda0737d9745111006bb9c8641f9b3bb:-349919640,7b21ebf93d05111088f44c0346b607aa:295992667,7b5f9779060511104cb9898c1afcc306:718880401,232c1f71110511103b426388e1b798d0:2034405675,e6d317bd5ac11110bc2e774625c8bd00:1564128081,51331b7daac1111071889ebbe7294f2f:-2143807757,de921379a9c111104e51e11b857bdddf:-2089919309,4d6e0739b3c11110b948b822feb08584:825170183,2a3d4bb59fc1111088a4798bbc624060:-2060516543,c8fc8f7572c11110e5f9015fac5683fe:-363572030,35cb4b75dbc11110cd67382f890b3603:1930136249,846b8b7593c1111090c0d605db8260f8:1191683166,863bcf35cec11110cf4ac6cf90e8c7b1:1903810207,610b037508c111102d774be41d6fabfb:-1871695372,a9ea83756cc1111086557ef4fac67791:-821554885,33aa0335f2c111101cf96c0740de72e7:922158501,935a8f716fc11110f72b6a6d39d303ea:-410425112,ac39877103c111105198493009c98efc:1672841264,80878b310cc11110af332dcc290f747f:1645812279,30678b3164c11110cd4d8460e52fc77b:1015650848,c427c731b3c111109e5b8461b51448c9:1161702301,82dfeee4eb895110ef9d2599d02d37bb:-887387333,770aa2e04b89511034097bb850415a8a:507685160,b910ce64d3c551105ecad76949ccf741:-887387333,547591806f09111071e339fe0ef61988:679918684,44d31100e10911101dbf4c2ce66b92a3:-107015577,8fa31d40df091110f936dd090d834d1a:-1392029636,d0715d8c48c511108cfa4c0a86ab038a:-1697701905,2e54b040438511103beb23bf37d602ee:893694671,a9f370cc8c451110baf1de9aadbb1529:398906673,e083b0cccf4511109e82b9f158f71298:1642607720,fdf270ccc74511104e82ac342b815d1e:1282805511,48223cc468451110d2f23a7c7f1a6373:1642607720,e5af6848f24511105416a0b4f356616a:398906673,8f7f2848fe451110541e6797b7096f96:-196817187,97cbe8c4c845111079fd28bb3763b74f:-33034640,88da64446d451110a38e5a2d102c795f:-110004046,cc8ae8c0b6451110cd45fe4f38c541ef:-1123599686,74896c80664511105aef5ae697cc78b1:780729311,5fb760c07945111017e1dc9fc1d90d91:1255083354,ea7760c0984511101d3db7e738c79480:-1470855895,963724ccba051110220755e97430c4ea:-1186869492,95a3ac8cac05111008510b048b491cd4:-1204030229,0b53a08c05051110d8ec8951c4beb860:-1691559459,d5a2a08c5b051110a0af5f38ecc6d75c:1614376461,b3d124889a051110c99ad80fbbb8ba9b:1370433103,12812488c305111020ed9ac0dc8ce494:1184811129,214f188839051110a4018e2840f68a4f:-404675953,bced98089005111013f88ebde8b28417:985698058,a35d90843c0511101a3589962401ad78:-1604087688,500c9084ea051110f401177725a55674:1777726170,87c91c0447051110566efa1b366c18a4:2110353458,6ea958041b051110cf6444451ae61eec:316730463,5a895804de051110ad8519125502e4e8:2064906226,6759940460051110abfa3f79cd7564e6:1344448949,ea77d440530511109caaef12ebb7c183:491290198,0157d0807f051110d1dcbef1681ffad8:49811190,2147108011051110fa7ea59cd6dc7c0a:1886280174,f607dc400b051110460244ad21167cee:1144304785,37c6d48c48c111109f5b80db17793490:1817582448,7276d040f205111096c667a5163aea36:-1807796659,c346180081051110aae4ec4384ee106f:-1476877606,1f061c0070051110d274005f745a378e:1931871274,23c5dc4cb6c111100ee9bd605b1a74bc:-840788971,52a51800410511105c6d14565e5a5b2b:484077141,e48554001a051110c55af0a0e53497a4:-885095153,28059c0cb1c111107152f48f9a7f5eb9:-872707558,0f54988c31c11110218e4fe4b647b1f8:-161766442,0424d80c05c11110a1a827176ab9ac2e:-415569211,5ea3184c4ec111108bb641cee2d276f5:-766171586,8e33980cfbc1111022d3e250dcc9d33c:252818417,8712d488f2c111105ac51c62ba850d4f:1849096941,d0119848d6c11110d30177b53a6a03e4:-738937185,0bf050c833c11110492d384c25afb177:-665432685,bac058488ec111109c391b822b4e402c:1300014689,c60090884ac11110f4434cc2862b167c:1477235045,682f4808b1c111105dc36176b891dded:889471678,1ceec40800c111107be02b74485099de:1477235045,dcbe080826c1111081af40b1fb625838:588242217,3b8e4808f5c111100c9d1493a4ed675f:-1310714206,936e84087ec1111041825413c7522cd9:-619162051,325ec0848ec11110a5a1bf44bbb7cec9:-1128591364,7e3ec484ebc1111029999871ecc3423d:-1368420427,a2accc04a6c111106c9622dbef0afb00:-1359261644,f05c4cc03ec11110dbff8d2a8765932e:87406599,c41cc804e3c1111081f0c6ca66900e4b:-710150676,e22b8c04e1c111109ea117dd60ce4be1:640460976,c2ca080452c111101228e273a2a36e2b:527596624,6c89c840ecc11110383f9b0245206b4a:-125577315,b76373f309701110965c3850727d2a96:1581099944</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-08-21 15:18:14</sys_created_on>
+        <sys_db_object display_value="" name="sys_ui_page">sys_ui_page</sys_db_object>
+        <sys_id>4a73eb7965ed49f099d207590e8e3900</sys_id>
+        <sys_metadata>7333f7f72f701110916d50492799b64c</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>application_explorer</sys_name>
+        <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
+        <sys_scope_delete display_value="">4712c933ab024ab09c54c6a639b0b390</sys_scope_delete>
+        <sys_update_name>sys_ui_page_7333f7f72f701110916d50492799b64c</sys_update_name>
+        <sys_update_version display_value="sys_ui_page_7333f7f72f701110916d50492799b64c">751e8b8c2f911110916d50492799b6f6</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-08-21 15:18:14</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

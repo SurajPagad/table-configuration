@@ -6,9 +6,13 @@ sampleApps.controller('mainCtrl', function($scope) {
     $scope.artifacts = [];
     $scope.loading = false;
     $j("#app_id_hidden").change(function() {
-        $scope.loading = true;
         var appID = gel('app_id_hidden').value;
+        var appName = gel('sys_display.app').value;
         if (appID) {
+            $scope.$apply(function() {
+                $scope.loading = true;
+                $scope.appName = appName;
+            });
             var ga = new GlideAjax('GetAppArtifacts');
             ga.addParam('sysparm_name', 'getAppArtifacts');
             ga.addParam('sysparm_app_id', appID);
@@ -18,19 +22,24 @@ sampleApps.controller('mainCtrl', function($scope) {
         function callBack(response) {
             var answer = response.responseXML.documentElement.getAttribute("answer");
             var parsedAnswer = JSON.parse(answer);
-            $scope.artifacts = parsedAnswer.artifacts;
-            $scope.loading = false;
-            $scope.$apply();
+            $scope.$apply(function() {
+                $scope.artifacts = parsedAnswer.artifacts;
+                $scope.loading = false;
+            });
         }
-        $scope.$apply();
     });
+
 
     $scope.removeSpecialChars = function(name) {
         return name.replaceAll(/[\s|&]/g, '');
     };
 
     $scope.toggleIcon = function(event) {
-        $j(event.target).find('i.rotate').toggleClass('icon-chevron-right icon-chevron-down');
+        var target = $j(event.target);
+        if (target.children().length) {
+            target.find('i.rotate').toggleClass('icon-chevron-right icon-chevron-down');
+        } else
+            target.toggleClass('icon-chevron-right icon-chevron-down');
     };
 
     $scope.getlink = function(artifactItem) {
@@ -57,41 +66,48 @@ function setHiddenInput() {
     <div data-doctype="true" ng-app="sn_sampleApps">
         <div ng-controller="mainCtrl">
             <p>Select an application to fetch the artifacts</p>
-            <g:ui_reference name="app" id="app_id" table="sys_scope" query="active=true" ng-model="app_id_model"
-                completer="AJAXTableCompleter" onchange="setHiddenInput()" columns="scope" />
+            <div class="row">
+                <div class="col-sm-4 search-bar">
+                    <g:ui_reference name="app" id="app_id" table="sys_scope" query="active=true" ng-model="app_id_model"
+                        completer="AJAXTableCompleter" onchange="setHiddenInput()" columns="scope" />
+                </div>
+                <div class="col-sm-8"></div>
+            </div>
             <input type="HIDDEN" name="app_id_hidden" ng-model='app_id_hidden' id="app_id_hidden"
                 ng-change="getArtifacts()" />
-            <div id='response'>
-                <div ng-if="loading">
-                    Loading...
-                </div>
-                <ul ng-if="artifacts.length > 0 &amp;&amp; !loading">
-                    <li ng-repeat="artifact in artifacts">
-                        <span ng-if="hasArtifacts(artifact.types)">
-                            <span data-toggle="collapse" data-target="{{'#'+removeSpecialChars(artifact.name)}}" ng-click="toggleIcon($event)" class="list-label"><i
-                                    class="icon-chevron-down rotate"></i>{{ artifact.name }}</span>
-                            <span ng-if="artifact.types &amp;&amp; artifact.types.length > 0">
-                                <ul class="collapse in collapsible-list" id="{{removeSpecialChars(artifact.name)}}">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div ng-if="loading">
+                        Please wait fetching artifacts for "{{appName}}".
+                    </div>
+                    <ul ng-if="artifacts.length > 0 &amp;&amp; !loading" class="main-ul">
+                        <li ng-repeat="artifact in artifacts">
+                            <span ng-if="hasArtifacts(artifact.types)">
+                                <span data-toggle="collapse" data-target="{{'#'+removeSpecialChars(artifact.name)}}"
+                                    ng-click="toggleIcon($event)" class="list-label"><i
+                                        class="icon-chevron-down rotate"></i>{{ artifact.name }}</span>
+                                <ul ng-if="artifact.types &amp;&amp; artifact.types.length > 0"
+                                    class="collapse in collapsible-list" id="{{removeSpecialChars(artifact.name)}}">
                                     <li ng-repeat="type in artifact.types">
                                         <span ng-if="type.artifacts &amp;&amp; type.artifacts.length > 0">
                                             <span data-toggle="collapse"
-                                                data-target="{{'#'+removeSpecialChars(type.name)}}" ng-click="toggleIcon($event)" class="list-label"><i
+                                                data-target="{{'#'+removeSpecialChars(type.name)}}"
+                                                ng-click="toggleIcon($event)" class="list-label"><i
                                                     class="icon-chevron-down rotate"></i>{{ type.name }}</span>
-                                            <span ng-if="type.artifacts.length > 0">
-                                                <ul class="collapse in collapsible-list" id="{{removeSpecialChars(type.name)}}">
-                                                    <li ng-repeat="artifactItem in type.artifacts">
-                                                        <a href='{{getlink(artifactItem)}}'
-                                                            target='_blank'>{{artifactItem.name}}</a>
-                                                    </li>
-                                                </ul>
-                                            </span>
+                                            <ul ng-if="type.artifacts.length > 0" class="collapse in collapsible-list"
+                                                id="{{removeSpecialChars(type.name)}}">
+                                                <li ng-repeat="artifactItem in type.artifacts">
+                                                    <a href='{{getlink(artifactItem)}}'
+                                                        target='_blank'>{{artifactItem.name}}</a>
+                                                </li>
+                                            </ul>
                                         </span>
                                     </li>
                                 </ul>
                             </span>
-                        </span>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -99,6 +115,10 @@ function setHiddenInput() {
     <style>
         ul {
             list-style: none
+        }
+
+        ul.main-ul {
+            padding-left: 0px;
         }
 
         i {
@@ -112,13 +132,13 @@ function setHiddenInput() {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-08-09 16:09:42</sys_created_on>
         <sys_id>388fd4902f191110916d50492799b6d9</sys_id>
-        <sys_mod_count>1</sys_mod_count>
+        <sys_mod_count>48</sys_mod_count>
         <sys_name>application_explorer_new</sys_name>
         <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
         <sys_policy/>
         <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
         <sys_update_name>sys_ui_page_388fd4902f191110916d50492799b6d9</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2022-08-09 18:40:39</sys_updated_on>
+        <sys_updated_on>2022-08-21 15:15:48</sys_updated_on>
     </sys_ui_page>
 </record_update>
