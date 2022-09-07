@@ -29,9 +29,16 @@ sampleApps.controller('mainCtrl', function($scope) {
         }
     });
 
-    $scope.setMode = function() {
-        $j('body').toggleClass('dark-mode');
-    };
+    $scope.collapseAll = function() {
+            $scope.artifacts.forEach(function(artifact) {
+				//alert('#' + $scope.removeSpecialChars(artifact.name));
+                $("'"+"#" + $scope.removeSpecialChars(artifact.name)+"'").collapse('toggle');
+            });
+        },
+
+        $scope.setMode = function() {
+            $j('body').toggleClass('dark-mode');
+        };
 
     $scope.removeSpecialChars = function(name) {
         return name.replaceAll(/[\s|&]/g, '');
@@ -74,12 +81,14 @@ function setHiddenInput() {
                     <g:ui_reference name="app" id="app_id" table="sys_scope" query="active=true" ng-model="app_id_model"
                         completer="AJAXTableCompleter" onchange="setHiddenInput()" columns="scope" />
                 </div>
-                <div class="col-sm-8">
+                <div class="col-sm-4">
 					<button ng-click="setMode()">Dark mode</button>
 				</div>
+				<div class="col-sm-4">
+					<button ng-click="collapseAll()">-</button>
+				</div>
             </div>
-            <input type="HIDDEN" name="app_id_hidden" ng-model='app_id_hidden' id="app_id_hidden"
-                ng-change="getArtifacts()" />
+            <input type="HIDDEN" name="app_id_hidden" ng-model='app_id_hidden' id="app_id_hidden" />
             <div class="row">
                 <div class="col-sm-4">
                     <div ng-if="loading">
@@ -103,7 +112,7 @@ function setHiddenInput() {
                                                 id="{{removeSpecialChars(type.name)}}">
                                                 <li ng-repeat="artifactItem in type.artifacts">
                                                     <a href='{{getlink(artifactItem)}}'
-                                                        target='_blank'>{{artifactItem.name}}<span class="glyphicon glyphicon-new-window"></span></a>
+                                                        target='_blank'>{{artifactItem.name}}</a>
                                                 </li>
                                             </ul>
                                         </span>
@@ -142,13 +151,13 @@ function setHiddenInput() {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-08-09 16:09:42</sys_created_on>
         <sys_id>388fd4902f191110916d50492799b6d9</sys_id>
-        <sys_mod_count>58</sys_mod_count>
+        <sys_mod_count>73</sys_mod_count>
         <sys_name>application_explorer_new</sys_name>
         <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
         <sys_policy/>
         <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
         <sys_update_name>sys_ui_page_388fd4902f191110916d50492799b6d9</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2022-08-21 16:06:32</sys_updated_on>
+        <sys_updated_on>2022-09-07 16:10:23</sys_updated_on>
     </sys_ui_page>
 </record_update>

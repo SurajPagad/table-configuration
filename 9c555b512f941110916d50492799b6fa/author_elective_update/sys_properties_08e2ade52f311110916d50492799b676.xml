@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties">
+    <sys_properties action="DELETE">
+        <choices/>
+        <description/>
+        <ignore_cache>true</ignore_cache>
+        <is_private>false</is_private>
+        <name>glide.ui.polaris.on_off_user_pref_enabled</name>
+        <read_roles/>
+        <suffix>glide.ui.polaris.on_off_user_pref_enabled</suffix>
+        <sys_class_name>sys_properties</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-09-07 14:47:10</sys_created_on>
+        <sys_id>08e2ade52f311110916d50492799b676</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>glide.ui.polaris.on_off_user_pref_enabled</sys_name>
+        <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
+        <sys_update_name>sys_properties_08e2ade52f311110916d50492799b676</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-09-07 14:47:10</sys_updated_on>
+        <type>string</type>
+        <value>true</value>
+        <write_roles/>
+    </sys_properties>
+    <sys_translated_text action="DELETE" query="documentkey=08e2ade52f311110916d50492799b676"/>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Table configuration">9c555b512f941110916d50492799b6fa</application>
+        <file_path/>
+        <instance_id>3ef751bddb92ff40f492c59705961990</instance_id>
+        <instance_name>dev88983</instance_name>
+        <name>sys_properties_08e2ade52f311110916d50492799b676</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties"><sys_properties action="INSERT_OR_UPDATE"><choices/><description/><ignore_cache>true</ignore_cache><is_private>false</is_private><name>glide.ui.polaris.on_off_user_pref_enabled</name><read_roles/><suffix>glide.ui.polaris.on_off_user_pref_enabled</suffix><sys_class_name>sys_properties</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2022-09-07 14:47:10</sys_created_on><sys_id>08e2ade52f311110916d50492799b676</sys_id><sys_mod_count>0</sys_mod_count><sys_name>glide.ui.polaris.on_off_user_pref_enabled</sys_name><sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package><sys_policy/><sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope><sys_update_name>sys_properties_08e2ade52f311110916d50492799b676</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2022-09-07 14:47:10</sys_updated_on><type>string</type><value>true</value><write_roles/></sys_properties><sys_translated_text action="delete_multiple" query="documentkey=08e2ade52f311110916d50492799b676"/></record_update>]]></payload>
+        <payload_hash>731745511</payload_hash>
+        <record_name>glide.ui.polaris.on_off_user_pref_enabled</record_name>
+        <reverted_from/>
+        <source>c6cb37152f981110916d50492799b662</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-09-07 14:47:10</sys_created_on>
+        <sys_id>8fe269e52f311110916d50492799b69f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>183186b557a0000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-09-07 14:47:10</sys_updated_on>
+        <type>System Property</type>
+        <update_guid>47e269e5c1311110f54f43196c4d7d9f</update_guid>
+        <update_guid_history>47e269e5c1311110f54f43196c4d7d9f:731745511</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-09-07 14:57:46</sys_created_on>
+        <sys_db_object display_value="" name="sys_properties">sys_properties</sys_db_object>
+        <sys_id>0281bd83406142568021a1f048a38ae4</sys_id>
+        <sys_metadata>08e2ade52f311110916d50492799b676</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>glide.ui.polaris.on_off_user_pref_enabled</sys_name>
+        <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
+        <sys_scope_delete display_value="">4712c933ab024ab09c54c6a639b0b390</sys_scope_delete>
+        <sys_update_name>sys_properties_08e2ade52f311110916d50492799b676</sys_update_name>
+        <sys_update_version display_value="sys_properties_08e2ade52f311110916d50492799b676">8fe269e52f311110916d50492799b69f</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-09-07 14:57:46</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

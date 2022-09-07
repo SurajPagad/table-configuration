@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script><![CDATA[var sampleApps = angular.module('sn_sampleApps', []);
+sampleApps.controller('mainCtrl', function($scope) {
+    $scope.table_id = '';
+    $j("#table_sysid").change(function() {
+        $scope.$apply(function() {
+            $scope.table_id = gel('table_sysid').value;
+            var table = new GlideRecord('sys_db_object');
+            if (table.get($scope.table_id))
+                $scope.tableName = table.name;
+        });
+    });
+
+    $scope.showList = function() {
+        if ($scope.tableName) {
+            window.open($scope.tableName + '_list.do');
+        } else {
+            alert("");
+        }
+        ts = null;
+    };
+
+    $scope.showForm = function() {
+        if ($scope.tableName) {
+            window.open($scope.tableName + '.do?sys_id=-1');
+        } else {
+            alert("");
+        }
+        ts = null;
+    };
+
+    $scope.formLayout = function() {
+        if ($scope.tableName) {
+            var ajaxHelper = new GlideAjax('TableEditorAjaxProcessor');
+            //var transactionScope = g_form.getValue('sysparm_transaction_scope');
+            ajaxHelper.addParam('sysparm_type', 'loadDefaultFormSection');
+            ajaxHelper.addParam('sysparm_tableName', $scope.tableName);
+            //ajaxHelper.addParam('sysparm_transaction_scope', transactionScope);
+            ajaxHelper.getXMLAnswer(this.redirectToFormLayout.bind(this));
+        } else {
+            alert("");
+        }
+        ts = null;
+    };
+
+    $scope.redirectToFormLayout = function(answer) {
+        if (answer != null) {
+            personalizer(answer, 'section');
+        }
+    };
+
+
+    $scope.designForm = function() {
+        if ($scope.tableName) {
+            var ajaxHelper = new GlideAjax('TableEditorAjaxProcessor');
+            ajaxHelper.addParam('sysparm_type', 'loadDefaultFormSection');
+            ajaxHelper.addParam('sysparm_tableName', $scope.tableName);
+            ajaxHelper.getXMLAnswer(this.redirectToFormDesign.bind(this));
+        } else {
+            alert("");
+        }
+        ts = null;
+    };
+
+    $scope.redirectToFormDesign = function(answer) {
+        if (answer != null) {
+            var url = new GlideURL('$ng_fd.do');
+            url.addParam('sysparm_attributes', 'startTable:"' + $scope.tableName + '",startView:"Default view"');
+            var w = getTopWindow();
+            w.popupOpenFocus(url.getURL(), 'edit_form_design', 950, 700, '', false, false);
+        }
+    };
+
+    $scope.listLayout = function() {
+        if ($scope.tableName) {
+            var ajaxHelper = new GlideAjax('TableEditorAjaxProcessor');
+            //var transactionScope = g_form.getValue('sysparm_transaction_scope');
+            ajaxHelper.addParam('sysparm_type', 'loadDefaultList');
+            ajaxHelper.addParam('sysparm_tableName', $scope.tableName);
+            //ajaxHelper.addParam('sysparm_transaction_scope', transactionScope);
+            ajaxHelper.getXMLAnswer(this.redirectToListLayout.bind(this));
+        } else {
+            alert("");
+        }
+        ts = null;
+    };
+
+    $scope.redirectToListLayout = function(answer) {
+        if (answer != null) {
+            personalizeList(answer, $scope.tableName);
+        }
+    };
+
+    $scope.buildExplorerRedirectURL = function() {
+        var url = new GlideURL('$restapi.do');
+        url.addParam('tableName', $scope.tableName);
+        return url;
+    };
+
+    $scope.openRestExplorer = function() {
+        if (isWebServiceNotEnabledForTable()) {
+            alert('This table is not configured to allow web service interaction. \n To allow access select the \'Allow access to this table via web services\', check box in the Application Access section and save your changes');
+            return;
+        }
+        var url = buildExplorerRedirectURL();
+        var w = getTopWindow();
+        var newWindow = w.open(url.getURL(), "_blank");
+        newWindow.focus();
+    };
+
+    $scope.isWebServiceNotEnabledForTable = function() {
+        var table = new GlideRecord('sys_db_object');
+        table.addQuery('name', $scope.tableName);
+        table.query();
+        if (table.next())
+            return table.getValue('ws_access') == 'false';
+    };
+
+    $scope.createRecordProducer = function() {
+        var table = new GlideRecord('sys_db_object');
+        table.addQuery('name', $scope.tableName);
+        table.query();
+        if (table.next())
+            var url = "slushbucket_create_record_producer.do?sysparm_form=record_producer&sysparm_list=" + $scope.tableName;
+        url += "&sysparm_stack=no&sysparm_referring_url=sys_db_object.do?sys_id=" + table.getValue('sys_id');
+        window.open(url);
+    };
+
+    $scope.showWorkflows = function() {
+        window.open("wf_workflow_version_list.do?sysparm_query=table%3D" + $scope.tableName + "%5EORtableIN" + $scope.tableName + "%2Csys_metadata");
+    };
+
+    $scope.allFiles = function() {
+        window.open("sys_metadata_list.do?sysparm_query=GOTO123TEXTQUERY321=" + $scope.tableName + '^GROUPBYsys_class_name');
+    };
+});
+
+function setHiddenInput() {
+    $j('#table_sysid').val(gel('table').value).trigger('change');
+}]]></client_script>
+        <description/>
+        <direct>false</direct>
+        <endpoint/>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+    <g2:requires name="scripts/angular_includes_1.4.js" includes="true" />
+    <div data-doctype="true" ng-app="sn_sampleApps">
+        <div ng-controller="mainCtrl">
+            <p>Select an table</p>
+            <div class="row">
+                <div class="col-sm-4 search-bar">
+                    <g:ui_reference name="table" id="table" table="sys_db_object" query="" ng-model="table"
+                        completer="AJAXTableCompleter" onchange="setHiddenInput()" />
+
+                </div>
+            </div>
+            <input type="HIDDEN" name="table_sysid" ng-model='table_sysid' id="table_sysid" />
+			<div ng-if="tableName">
+				<button id="show_list" ng-click="showList()"
+					title="${gs.getMessage('Click to open list for the selected table')}">
+					${gs.getMessage('Show List')}
+				</button>
+
+				<button id="show_form" ng-click="showForm()"
+					title="${gs.getMessage('Click to open form for the selected table')}">
+					${gs.getMessage('Show Form')}
+				</button>
+
+				<button id="design_form" ng-click="designForm()"
+					title="${gs.getMessage('Click to design form for the selected table')}">
+					${gs.getMessage('Design Form')}
+				</button>
+
+				<button id="form_layout" ng-click="formLayout()"
+					title="${gs.getMessage('Click to configure form layout for the selected table')}">
+					${gs.getMessage('Form Layout')}
+				</button>
+
+				<button id="list_layout" ng-click="listLayout()"
+					title="${gs.getMessage('Click to configure list layout for the selected table')}">
+					${gs.getMessage('List Layout')}
+				</button>
+
+				<button id="rest_explorer" ng-click="openRestExplorer()"
+					title="${gs.getMessage('Click to open Rest API explorer for the selected table')}">
+					${gs.getMessage('Open Rest API Explorer')}
+				</button>
+
+				<button id="record_producer" ng-click="createRecordProducer()"
+					title="${gs.getMessage('Click to create record producer for the selected table')}">
+					${gs.getMessage('Create record producer')}
+				</button>
+
+				<button id="show_wf" ng-click="showWorkflows()"
+					title="${gs.getMessage('Click to open workflows for the selected table')}">
+					${gs.getMessage('Workflows')}
+				</button>
+
+				<button id="all_files" ng-click="allFiles()"
+					title="${gs.getMessage('Click to open application files for the selected table')}">
+					${gs.getMessage('All files')}
+				</button>
+			</div>
+        </div>
+    </div>
+</j:jelly>]]></html>
+        <name>Table studio</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-09-07 14:58:01</sys_created_on>
+        <sys_id>98052d6d2f311110916d50492799b6ee</sys_id>
+        <sys_mod_count>19</sys_mod_count>
+        <sys_name>Table studio</sys_name>
+        <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
+        <sys_update_name>sys_ui_page_98052d6d2f311110916d50492799b6ee</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-09-07 16:06:33</sys_updated_on>
+    </sys_ui_page>
+</record_update>
