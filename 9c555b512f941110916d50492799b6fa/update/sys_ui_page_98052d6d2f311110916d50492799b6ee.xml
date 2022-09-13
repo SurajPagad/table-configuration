@@ -6,18 +6,21 @@ sampleApps.controller('mainCtrl', function($scope) {
     $scope.table_id = '';
     $scope.url = "";
     $j("#table_sysid").change(function() {
+		$scope.tableName = '';
+		$scope.url = "";
+		$scope.$apply();
         $scope.table_id = gel('table_sysid').value;
         var table = new GlideRecord('sys_db_object');
         if (table.get($scope.table_id)) {
             $scope.tableName = table.name;
-			$scope.$apply();
+            $scope.$apply();
         }
     });
 
     $scope.showList = function() {
         if ($scope.tableName) {
-			$scope.url = $scope.tableName + '_list.do';
-			$scope.$apply();
+            $scope.url = $scope.tableName + '_list.do';
+            $scope.$apply();
             //window.open($scope.tableName + '_list.do');
         } else {
             alert("");
@@ -27,7 +30,9 @@ sampleApps.controller('mainCtrl', function($scope) {
 
     $scope.showForm = function() {
         if ($scope.tableName) {
-            window.open($scope.tableName + '.do?sys_id=-1');
+            $scope.url = $scope.tableName + '.do?sys_id=-1';
+            $scope.$apply();
+            //window.open($scope.tableName + '.do?sys_id=-1');
         } else {
             alert("");
         }
@@ -71,8 +76,10 @@ sampleApps.controller('mainCtrl', function($scope) {
         if (answer != null) {
             var url = new GlideURL('$ng_fd.do');
             url.addParam('sysparm_attributes', 'startTable:"' + $scope.tableName + '",startView:"Default view"');
-            var w = getTopWindow();
-            w.popupOpenFocus(url.getURL(), 'edit_form_design', 950, 700, '', false, false);
+            $scope.url = url.getURL();
+            $scope.$apply();
+            //var w = getTopWindow();
+            //w.popupOpenFocus(url.getURL(), 'edit_form_design', 950, 700, '', false, false);
         }
     };
 
@@ -95,6 +102,19 @@ sampleApps.controller('mainCtrl', function($scope) {
             personalizeList(answer, $scope.tableName);
         }
     };
+    $scope.showSchemaMap = function() {
+        $scope.url = 'generic_hierarchy_erd.do?' +
+            'sysparm_attributes=table_history=,table=' + $scope.tableName + ',show_internal=true,' +
+            'show_referenced=false,show_referenced_by=false,show_extended=true,show_extended_by=true,' +
+            'table_expansion=,spacing_x=60,spacing_y=90,nocontext';
+        $scope.$apply();
+
+    };
+
+    $scope.opentableConfig = function() {
+        $scope.url = 'personalize_all.do?sysparm_rules_table=' + $scope.tableName + '&sysparm_rules_label=' + $scope.tableName;
+        $scope.$apply();
+    };
 
     $scope.buildExplorerRedirectURL = function() {
         var url = new GlideURL('$restapi.do');
@@ -103,14 +123,16 @@ sampleApps.controller('mainCtrl', function($scope) {
     };
 
     $scope.openRestExplorer = function() {
-        if (isWebServiceNotEnabledForTable()) {
+        if ($scope.isWebServiceNotEnabledForTable()) {
             alert('This table is not configured to allow web service interaction. \n To allow access select the \'Allow access to this table via web services\', check box in the Application Access section and save your changes');
             return;
         }
-        var url = buildExplorerRedirectURL();
-        var w = getTopWindow();
-        var newWindow = w.open(url.getURL(), "_blank");
-        newWindow.focus();
+        var url = $scope.buildExplorerRedirectURL();
+        $scope.url = url.getURL();
+        $scope.$apply();
+        //var w = getTopWindow();
+        //var newWindow = w.open(url.getURL(), "_blank");
+        //newWindow.focus();
     };
 
     $scope.isWebServiceNotEnabledForTable = function() {
@@ -128,15 +150,21 @@ sampleApps.controller('mainCtrl', function($scope) {
         if (table.next())
             var url = "slushbucket_create_record_producer.do?sysparm_form=record_producer&sysparm_list=" + $scope.tableName;
         url += "&sysparm_stack=no&sysparm_referring_url=sys_db_object.do?sys_id=" + table.getValue('sys_id');
-        window.open(url);
+        $scope.url = url;
+        $scope.$apply();
+        //window.open(url);
     };
 
     $scope.showWorkflows = function() {
-        window.open("wf_workflow_version_list.do?sysparm_query=table%3D" + $scope.tableName + "%5EORtableIN" + $scope.tableName + "%2Csys_metadata");
+        //window.open("wf_workflow_version_list.do?sysparm_query=table%3D" + $scope.tableName + "%5EORtableIN" + $scope.tableName + "%2Csys_metadata");
+        $scope.url = "wf_workflow_version_list.do?sysparm_query=table%3D" + $scope.tableName + "%5EORtableIN" + $scope.tableName + "%2Csys_metadata";
+        $scope.$apply();
     };
 
     $scope.allFiles = function() {
-        window.open("sys_metadata_list.do?sysparm_query=GOTO123TEXTQUERY321=" + $scope.tableName + '^GROUPBYsys_class_name');
+        //window.open("sys_metadata_list.do?sysparm_query=GOTO123TEXTQUERY321=" + $scope.tableName + '^GROUPBYsys_class_name');
+        $scope.url = "sys_metadata_list.do?sysparm_query=GOTO123TEXTQUERY321=" + $scope.tableName + '^GROUPBYsys_class_name';
+        $scope.$apply();
     };
 });
 
@@ -151,63 +179,76 @@ function setHiddenInput() {
     <g2:requires name="scripts/angular_includes_1.4.js" includes="true" />
     <div data-doctype="true" ng-app="sn_sampleApps">
         <div ng-controller="mainCtrl">
-			<div>Select an table</div>
             <div class="row">
-                <div class="col-sm-4 search-bar">
-                    <g:ui_reference name="table" id="table" table="sys_db_object" query="" ng-model="table"
-                        completer="AJAXTableCompleter" onchange="setHiddenInput()" />
-
-                </div>
+					<div class="col-sm-4">
+							<label class="search-label" for="table">Select a table</label>
+							<span class="search-bar"><g:ui_reference name="table" id="table" table="sys_db_object" columns_search="false" query="" ng-model="table"
+												  completer="AJAXTableCompleter" onchange="setHiddenInput()" /></span>
+					</div>
             </div>
             <input type="HIDDEN" name="table_sysid" ng-model='table_sysid' id="table_sysid" />
-			<div ng-if="tableName">
-				<button id="show_list" ng-click="showList()"
+			<div ng-if="tableName" class="config-links">
+				<a id="show_list" ng-click="showList()" formtarget="responsive-iframe"
 					title="${gs.getMessage('Click to open list for the selected table')}">
 					${gs.getMessage('Show List')}
-				</button>
-
-				<button id="show_form" ng-click="showForm()"
+				</a>
+				<span>|</span>
+				<a id="show_form" ng-click="showForm()" formtarget="responsive-iframe"
 					title="${gs.getMessage('Click to open form for the selected table')}">
 					${gs.getMessage('Show Form')}
-				</button>
-
-				<button id="design_form" ng-click="designForm()"
+				</a>
+				<span>|</span>
+				<j2:if test="$[pm.isRegistered('com.snc.apps')]">
+					<a id="open_table_config" ng-click="opentableConfig()" formtarget="responsive-iframe"
+							title="${gs.getMessage('Click to open configuration for the selected table')}">
+						${gs.getMessage('Table Configs')}
+					</a>
+				</j2:if>
+				<span>|</span>
+				<j2:if test="$[pm.isRegistered('com.glide.erd')]">
+					<a id="schema-map" ng-click="showSchemaMap()" formtarget="responsive-iframe"
+					title="${gs.getMessage('Click to show schema map of the selected table')}">
+					${gs.getMessage('Show schema map')}
+				</a>
+				</j2:if>
+				<span>|</span>
+				<a id="design_form" ng-click="designForm()" formtarget="responsive-iframe"
 					title="${gs.getMessage('Click to design form for the selected table')}">
 					${gs.getMessage('Design Form')}
-				</button>
-
-				<button id="form_layout" ng-click="formLayout()"
+				</a>
+				<span>|</span>
+				<a id="form_layout" ng-click="formLayout()" formtarget="responsive-iframe"
 					title="${gs.getMessage('Click to configure form layout for the selected table')}">
 					${gs.getMessage('Form Layout')}
-				</button>
-
-				<button id="list_layout" ng-click="listLayout()"
+				</a>
+				<span>|</span>
+				<a id="list_layout" ng-click="listLayout()" formtarget="responsive-iframe"
 					title="${gs.getMessage('Click to configure list layout for the selected table')}">
 					${gs.getMessage('List Layout')}
-				</button>
-
-				<button id="rest_explorer" ng-click="openRestExplorer()"
+				</a>
+				<span>|</span>
+				<a id="rest_explorer" ng-click="openRestExplorer()" formtarget="responsive-iframe"
 					title="${gs.getMessage('Click to open Rest API explorer for the selected table')}">
 					${gs.getMessage('Open Rest API Explorer')}
-				</button>
-
-				<button id="record_producer" ng-click="createRecordProducer()"
+				</a>
+				<span>|</span>
+				<a id="record_producer" ng-click="createRecordProducer()" formtarget="responsive-iframe"
 					title="${gs.getMessage('Click to create record producer for the selected table')}">
 					${gs.getMessage('Create record producer')}
-				</button>
-
-				<button id="show_wf" ng-click="showWorkflows()"
+				</a>
+				<span>|</span>
+				<a id="show_wf" ng-click="showWorkflows()" formtarget="responsive-iframe"
 					title="${gs.getMessage('Click to open workflows for the selected table')}">
 					${gs.getMessage('Workflows')}
-				</button>
-
-				<button id="all_files" ng-click="allFiles()"
+				</a>
+				<span>|</span>
+				<a id="all_files" ng-click="allFiles()" formtarget="responsive-iframe"
 					title="${gs.getMessage('Click to open application files for the selected table')}">
 					${gs.getMessage('All files')}
-				</button>
+				</a>
 			</div>
 			<div class="iframe-container" ng-if="url">
-				<iframe class="responsive-iframe" src="{{url}}"  style="border:none;">
+				<iframe class="responsive-iframe" name="responsive-iframe" src="{{url}}" allow="fullscreen" style="border:none;">
 </iframe>
 			</div>
         </div>
@@ -230,6 +271,20 @@ function setHiddenInput() {
 		  width: 100%;
 		  height: 100%;
 		}
+		
+		.search-label {
+			float: left;
+			padding: 6px;
+		}
+		
+		.search-bar {
+			display: block;
+			overflow: hidden;
+			padding: 0 4px 0 6px;
+		}
+		.config-links span{
+			padding: 0 4px 0 4px;
+		}
 	</style>
 </j:jelly>]]></html>
         <name>Table studio</name>
@@ -239,7 +294,7 @@ function setHiddenInput() {
         <sys_created_on>2022-09-07 14:58:01</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>98052d6d2f311110916d50492799b6ee</sys_id>
-        <sys_mod_count>36</sys_mod_count>
+        <sys_mod_count>78</sys_mod_count>
         <sys_name>Table studio</sys_name>
         <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
         <sys_policy/>
@@ -247,6 +302,6 @@ function setHiddenInput() {
         <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
         <sys_update_name>sys_ui_page_98052d6d2f311110916d50492799b6ee</sys_update_name>
         <sys_updated_by>CLONE-ADMIN</sys_updated_by>
-        <sys_updated_on>2022-09-13 16:08:24</sys_updated_on>
+        <sys_updated_on>2022-09-13 18:21:44</sys_updated_on>
     </sys_ui_page>
 </record_update>
