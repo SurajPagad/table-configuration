@@ -170,7 +170,11 @@ sampleApps.controller('mainCtrl', function($scope) {
 
 function setHiddenInput() {
     $j('#table_sysid').val(gel('table').value).trigger('change');
-}]]></client_script>
+}
+
+// document.getElementById('responsive-iframe').onload = function(){
+//   document.getElementById('loading-img').style.display = "none";
+// };]]></client_script>
         <description/>
         <direct>false</direct>
         <endpoint/>
@@ -181,9 +185,10 @@ function setHiddenInput() {
         <div ng-controller="mainCtrl">
             <div class="row">
 					<div class="col-sm-4">
-							<label class="search-label" for="table">Select a table</label>
-							<span class="search-bar"><g:ui_reference name="table" id="table" table="sys_db_object" columns_search="false" query="" ng-model="table"
-												  completer="AJAXTableCompleter" onchange="setHiddenInput()" /></span>
+						<label class="search-label" for="table">Select a table</label>
+						<span class="search-bar">
+							<g:ui_reference name="table" id="table" table="sys_db_object" columns_search="false" query="" ng-model="table" completer="AJAXTableCompleter" onchange="setHiddenInput()" />
+						</span>
 					</div>
             </div>
             <input type="HIDDEN" name="table_sysid" ng-model='table_sysid' id="table_sysid" />
@@ -248,9 +253,10 @@ function setHiddenInput() {
 				</a>
 			</div>
 			<div class="iframe-container" ng-if="url">
-				<iframe class="responsive-iframe" name="responsive-iframe" src="{{url}}" allow="fullscreen" style="border:none;">
+				<iframe class="responsive-iframe" id="responsive-iframe" name="responsive-iframe" src="{{url}}" allow="fullscreen" style="border:none;">
 </iframe>
 			</div>
+			<img ng-if="url" id="loading-img" src="loading_status_icon.gif" width="200" height="200"/>
         </div>
     </div>
 	<style>
@@ -285,6 +291,9 @@ function setHiddenInput() {
 		.config-links span{
 			padding: 0 4px 0 4px;
 		}
+		.iframe-container{
+			background-image:url("loading_status_icon.gif") center center no-repeat;
+		}
 	</style>
 </j:jelly>]]></html>
         <name>Table studio</name>
@@ -294,7 +303,7 @@ function setHiddenInput() {
         <sys_created_on>2022-09-07 14:58:01</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>98052d6d2f311110916d50492799b6ee</sys_id>
-        <sys_mod_count>78</sys_mod_count>
+        <sys_mod_count>91</sys_mod_count>
         <sys_name>Table studio</sys_name>
         <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
         <sys_policy/>
@@ -302,6 +311,6 @@ function setHiddenInput() {
         <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
         <sys_update_name>sys_ui_page_98052d6d2f311110916d50492799b6ee</sys_update_name>
         <sys_updated_by>CLONE-ADMIN</sys_updated_by>
-        <sys_updated_on>2022-09-13 18:21:44</sys_updated_on>
+        <sys_updated_on>2022-09-14 06:16:19</sys_updated_on>
     </sys_ui_page>
 </record_update>
