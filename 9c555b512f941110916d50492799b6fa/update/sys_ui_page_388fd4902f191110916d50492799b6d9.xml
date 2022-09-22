@@ -30,15 +30,21 @@ sampleApps.controller('mainCtrl', function($scope) {
     });
 
     $scope.collapseAll = function() {
-            $scope.artifacts.forEach(function(artifact) {
-				//alert('#' + $scope.removeSpecialChars(artifact.name));
-                $("'"+"#" + $scope.removeSpecialChars(artifact.name)+"'").collapse('toggle');
-            });
-        },
+        $scope.artifacts.forEach(function(artifact) {
+            var artifactSanitised = $scope.removeSpecialChars(artifact.name);
+			if($scope.hasArtifacts(artifact.types)){
+				artifact.types.forEach(function(type) {
+					var typeSanitised = $scope.removeSpecialChars(type.name);
+					$j('#'+typeSanitised).collapse('hide');
+				});
+			}
+            $j('#'+artifactSanitised).collapse('hide');
+        });
+    };
 
-        $scope.setMode = function() {
-            $j('body').toggleClass('dark-mode');
-        };
+    $scope.setMode = function() {
+        $j('body').toggleClass('dark-mode');
+    };
 
     $scope.removeSpecialChars = function(name) {
         return name.replaceAll(/[\s|&]/g, '');
@@ -84,7 +90,7 @@ function setHiddenInput() {
                 <div class="col-sm-4">
 					<button ng-click="setMode()">Dark mode</button>
 				</div>
-				<div class="col-sm-4">
+				<div ng-if="artifacts.length > 0" class="col-sm-4">
 					<button ng-click="collapseAll()">-</button>
 				</div>
             </div>
@@ -101,18 +107,18 @@ function setHiddenInput() {
                                     ng-click="toggleIcon($event)" class="list-label"><i
                                         class="icon-chevron-down rotate"></i>{{ artifact.name }}</span>
                                 <ul ng-if="artifact.types &amp;&amp; artifact.types.length > 0"
-                                    class="collapse in collapsible-list" id="{{removeSpecialChars(artifact.name)}}">
+                                    class="collapse in" id="{{removeSpecialChars(artifact.name)}}">
                                     <li ng-repeat="type in artifact.types">
                                         <span ng-if="type.artifacts &amp;&amp; type.artifacts.length > 0">
                                             <span data-toggle="collapse"
                                                 data-target="{{'#'+removeSpecialChars(type.name)}}"
                                                 ng-click="toggleIcon($event)" class="list-label"><i
                                                     class="icon-chevron-down rotate"></i>{{ type.name }}</span>
-                                            <ul ng-if="type.artifacts.length > 0" class="collapse in collapsible-list"
+                                            <ul ng-if="type.artifacts.length > 0" class="collapse in"
                                                 id="{{removeSpecialChars(type.name)}}">
                                                 <li ng-repeat="artifactItem in type.artifacts">
                                                     <a href='{{getlink(artifactItem)}}'
-                                                        target='_blank'>{{artifactItem.name}}</a>
+                                                        target='_blank'>{{artifactItem.name}} ➚</a>
                                                 </li>
                                             </ul>
                                         </span>
@@ -151,13 +157,13 @@ function setHiddenInput() {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-08-09 16:09:42</sys_created_on>
         <sys_id>388fd4902f191110916d50492799b6d9</sys_id>
-        <sys_mod_count>73</sys_mod_count>
+        <sys_mod_count>107</sys_mod_count>
         <sys_name>application_explorer_new</sys_name>
         <sys_package display_value="Table configuration" source="9c555b512f941110916d50492799b6fa">9c555b512f941110916d50492799b6fa</sys_package>
         <sys_policy/>
         <sys_scope display_value="Table configuration">9c555b512f941110916d50492799b6fa</sys_scope>
         <sys_update_name>sys_ui_page_388fd4902f191110916d50492799b6d9</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2022-09-07 16:10:23</sys_updated_on>
+        <sys_updated_on>2022-09-22 12:41:43</sys_updated_on>
     </sys_ui_page>
 </record_update>
